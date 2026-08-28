@@ -1,0 +1,19 @@
+{
+  "name": "DropAgentX — بازارچه هوشمند تلگرام",
+  "short_name": "DropAgentX",
+  "description": "مارکت‌پلیس محصولات دیجیتال با دستیار AI — خرید و فروش با کردیت و USDT",
+  "start_url": "/shop",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "dir": "rtl",
+  "lang": "fa",
+  "theme_color": "#0b0e14",
+  "background_color": "#0b0e14",
+  "icons": [
+    {"src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+    {"src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
+  ]
+}

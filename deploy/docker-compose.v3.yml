@@ -1,0 +1,55 @@
+# DropAgentX v3 — 3-service monorepo runtime.
+#   gateway  : builds from this repo (runs gateway/gateway.py)
+#   bot      : builds from this repo (runs bot.py — bot + web admin)
+#   router   : 9router (published docker image) — LLM routing / dashboard
+#
+# The gateway is the single entry; it proxies /v1 -> router and /dashboard -> router.
+services:
+  gateway:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.gateway
+    container_name: dropagentx-gateway
+    restart: unless-stopped
+    env_file: ../.env
+    environment:
+      WEB_PORT: 8080
+      ROUTER_BASE_URL: http://router:20128
+      ROUTER_DASH_URL: http://router:3000
+      A2A_TOKEN: ${A2A_TOKEN:-}
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    depends_on:
+      - bot
+      - router
+    init: true
+
+  # The actual bot + web admin (the marketplace product).
+  bot:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: dropagentx-bot
+    restart: unless-stopped
+    env_file: ../.env
+    environment:
+      WEB_PORT: 8081
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    init: true
+
+  # 9router — LLM router + web dashboard (pull image; the repo is self-hostable too).
+  router:
+    image: decolua/9router:latest
+    container_name: dropagentx-router
+    restart: unless-stopped
+    environment:
+      DATA_DIR: /app/data
+      PORT: 20128
+    volumes:
+      - router-data:/app/data
+    init: true
+
+volumes:
+  router-data:

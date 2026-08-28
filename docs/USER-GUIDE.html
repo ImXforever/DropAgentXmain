@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>راهنمای کامل کاربر — DropAgentX</title>
+<meta name="theme-color" content="#0b0e17">
+<link rel="icon" href="/icon.svg">
+<style>
+:root{--bg:#0b0e17;--card:rgba(255,255,255,.05);--line:rgba(255,255,255,.1);--txt:#e8ecf4;--dim:#9aa3b5;--cyan:#22d3ee;--green:#34d399;--amber:#fbbf24;--violet:#a78bfa;--pink:#f472b6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:Vazirmatn,Vazirmatn FD,Tahoma,sans-serif;line-height:2.1;padding:24px 16px;max-width:900px;margin:0 auto}
+.glow{position:fixed;inset:0;pointer-events:none;background:radial-gradient(600px 300px at 85% -5%,rgba(34,211,238,.12),transparent 60%),radial-gradient(500px 260px at 5% 15%,rgba(167,139,250,.10),transparent 60%)}
+.wrap{position:relative}
+header{text-align:center;padding:26px 14px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,rgba(34,211,238,.08),rgba(167,139,250,.06));margin-bottom:24px}
+h1{font-size:1.6rem;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);font-size:.95rem;margin-top:6px}
+h2{font-size:1.25rem;margin:32px 0 14px;padding-right:12px;border-right:4px solid var(--cyan)}
+h2.v{border-color:var(--violet)} h2.g{border-color:var(--green)} h2.p{border-color:var(--pink)} h2.a{border-color:var(--amber)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px}
+.steps{counter-reset:s}
+.step{display:flex;gap:14px;margin:12px 0;align-items:flex-start}
+.step::before{counter-increment:s;content:counter(s);flex:0 0 34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;background:linear-gradient(135deg,#0ea5e9,#8b5cf6);color:#fff}
+.step b{display:block}
+.step span{color:var(--dim);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:10px 0}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--cyan);background:rgba(34,211,238,.06)}
+.tip{border-radius:12px;padding:12px 16px;margin:10px 0;font-size:.9rem}
+.t-g{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3)}
+.t-a{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.3)}
+.t-r{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3)}
+kbd{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:8px;padding:2px 10px;font-size:.85em}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:8px 0}
+summary{cursor:pointer;font-weight:700}
+details p{color:var(--dim);font-size:.9rem;margin-top:6px}
+.foot{text-align:center;color:var(--dim);font-size:.8rem;margin-top:26px}
+.foot a{color:var(--cyan);text-decoration:none}
+.btn{display:inline-block;padding:11px 28px;border-radius:14px;text-decoration:none;font-weight:700;margin:14px 6px 0;background:linear-gradient(90deg,#0ea5e9,#8b5cf6);color:#fff}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="wrap">
+
+<header>
+  <h1>📘 راهنمای کامل کاربر — DropAgentX 0.5.1</h1>
+  <div class="sub">از صفر تا اولین درآمد دلاری — همه‌چیز با دکمه، همه‌چیز داخل تلگرام</div>
+  <a class="btn" href="https://t.me/ImXforevr" target="_blank" rel="noopener">🆘 پشتیبانی: @ImXforevr</a>
+</header>
+
+<h2>🚀 شروع — ۵ قدم اول</h2>
+<div class="card steps">
+  <div class="step"><div><b>استارت بزن</b><span>دکمهٔ شروع رایگان یا ارسال <kbd>/start</kbd> — ۵۰ کردیت هدیه می‌گیری. اگر جزو ۱٬۰۰۰ نفر اول باشی، ۱۰۰ کردیت هم اضافه!</span></div></div>
+  <div class="step"><div><b>کد هدیهٔ تبلیغ را بزن</b><span>اگر از تبلیغ آمده‌ای: <kbd>💰 کیف پول</kbd> ← <kbd>🎟 کد هدیه دارم</kbd> ← کد را تایپ کن.</span></div></div>
+  <div class="step"><div><b>اولین تسک را انجام بده</b><span><kbd>✅ کسب کردیت</kbd> ← یک تسک ساده (فالو/عضویت) ← <kbd>✅ انجام دادم!</kbd> ← بعد از تأیید ادمین، پاداش می‌ریزد.</span></div></div>
+  <div class="step"><div><b>بونوس روزانه را بگیر</b><span>هر روز <kbd>🎁 بونوس روزانه</kbd> — پشت‌سرهم بیایی استریک می‌گیری و بیشتر می‌شود (۱۵ پایه + ۵×استریک، سقف ۵۰).</span></div></div>
+  <div class="step"><div><b>ماموریت‌ها را ببین</b><span><kbd>🏆 ماموریت‌ها</kbd> — ۵ ماموریت جایزه‌دار (تا ۲۷۰ کردیت) + XP و سطح. پیشرفتت زنده به‌روز می‌شود.</span></div></div>
+</div>
+<div class="tip t-g">💡 <b>رایگان پیش برو:</b> با تسک + بونوس + ماموریت، بدون حتی ۱ تومان پول می‌توانی کردیت بسازی.</div>
+
+<h2 class="v">💗 چت با هرمس (دستیار AI)</h2>
+<div class="card">
+  <p>دکمهٔ <kbd>💗 با هرمسا گپ بزن</kbd>. هرمس حافظه دارد — اسمت و سلیقه‌ات را یادش می‌ماند.</p>
+  <table>
+    <tr><th>چی بخواه</th><th>مثال</th></tr>
+    <tr><td>ایدهٔ محصول</td><td>«۳ ایدهٔ محصول دیجیتال برای دانشجوها پیشنهاد بده»</td></tr>
+    <tr><td>ساخت لیستینگ</td><td>«برای پک پرامپت فریلنسری عنوان و توضیح فروش بنویس»</td></tr>
+    <tr><td>تحلیل عکس</td><td>عکس بفرست + «این کاور رو نقد کن»</td></tr>
+    <tr><td>قیمت‌گذاری</td><td>«این محصول چند کردیت بفروشم که بفروشه؟»</td></tr>
+  </table>
+  <div class="tip t-a">⚡ هر پیام AI کردیت مصرف می‌کند (~۵-۱۵). سوال‌های دقیق بپرس تا با پیام کمتر جواب کامل بگیری.</div>
+</div>
+
+<h2 class="g">📦 فروش — از ایده تا USDT</h2>
+<div class="card steps">
+  <div class="step"><div><b>ساخت محصول</b><span><kbd>📦 فروش کن</kbd> ← <kbd>➕ ساخت محصول جدید</kbd> ← <kbd>🤖 با کمک هوش مصنوعی</kbd> (پیشنهاد) یا <kbd>✍️ ساخت دستی</kbd> — ۵ قدم دکمه‌ای: اسم، توضیح، قیمت، فایل، تگ.</span></div></div>
+  <div class="step"><div><b>تأیید مدیر</b><span>محصول بعد از چک سریع ادمین منتشر می‌شود (ضد اسپم و کلاهبرداری).</span></div></div>
+  <div class="step"><div><b>فروش و تحویل خودکار</b><span>خریدار دکمهٔ خرید را می‌زند، کردیت کم می‌شود و فایل همان لحظه تحویل می‌شود — تو فقط اعلان فروش می‌گیری!</span></div></div>
+  <div class="step"><div><b>امتیازها را ببین</b><span><kbd>💸 فروش من</kbd> — درآمد، تعداد فروش، نرخ تبدیل بازدید و میانگین ستاره‌هایت.</span></div></div>
+</div>
+<div class="tip t-a">💰 قیمت هوشمند: سه بسته بگذار (مینی ۵۰-۱۵۰ / استاندارد ۲۰۰-۵۰۰ / کامل ۸۰۰+). بستهٔ وسط معمولاً پرفروش‌ترین است.</div>
+
+<h2>🛒 خرید — امن و آنی</h2>
+<div class="card">
+  <p><kbd>🛒 فروشگاه</kbd> ← جستجو/دسته ← کارت محصول ← <kbd>خرید</kbd>. فایل بلافاصله در چت تحویل می‌شود. گم شدی؟ از <b>«خریدهای من»</b> همیشه دوباره قابل دریافت است.</p>
+  <p>بعد از دریافت، <kbd>⭐ امتیاز بده</kbd> — به فروشنده خوب انرژی بده، به بقیه مسیر نشان بده.</p>
+  <div class="tip t-r">⚠️ معاملهٔ خارج از بات (پرداخت مستقیم به شخص) = ریسک ۱۰۰٪ با خودت. همه‌چیز را داخل بات انجام بده تا ضمانت داشته باشی.</div>
+</div>
+
+<h2 class="p">💰 کیف پول — واریز و برداشت USDT</h2>
+<div class="card">
+  <table>
+    <tr><th>کار</th><th>چطور</th></tr>
+    <tr><td>واریز</td><td><kbd>📥 واریز USDT</kbd> ← شبکه (TON/BSC/SOL/TRX) ← مبلغ ← واریز به آدرس ← رسید را بفرست ← تأیید ادمین</td></tr>
+    <tr><td>برداشت</td><td><kbd>📤 برداشت</kbd> ← حداقل ۵ USDT (اولین بار فقط ۳!) ← آدرس کیف پولت ← پرداخت دستی و اطلاع در چت</td></tr>
+    <tr><td>تبدیل</td><td>۱٬۰۰۰ کردیت = ۱ USDT (نرخ ثابت داخل بات)</td></tr>
+  </table>
+  <div class="tip t-r">🔑 <b>آدرس را همیشه کپی/پیست کن</b> — شبکهٔ فرستنده و گیرنده باید یکی باشد وگرنه پول گم می‌شود. پشتیبانی هرگز USDT از تو نمی‌خواهد!</div>
+</div>
+
+<h2 class="a">👥 دعوت دوستان — درآمد مادام‌العمر</h2>
+<div class="card">
+  <p><kbd>👥 دعوت دوستان</kbd> ← لینک اختصاصی‌ات را کپی کن و بفرست.</p>
+  <table>
+    <tr><th>رخداد</th><th>سهم تو</th></tr>
+    <tr><td>هر دعوت موفق</td><td>🎁 جعبه‌شانس فوری ۵-۲۰ کردیت + دوستت هم هدیه می‌گیرد</td></tr>
+    <tr><td>اولین فعالیت دوست</td><td>+۷۵ کردیت</td></tr>
+    <tr><td>هر خریدش — برای همیشه</td><td>💸 ۲۰٪ کمیسیون!</td></tr>
+  </table>
+  <p>لیدربورد معرفان را هم ببین — هر هفته رقابت است! 🏆</p>
+</div>
+
+<h2>🎫 مشکل داشتی؟</h2>
+<div class="card">
+  <p><kbd>🎫 پشتیبانی</kbd> ← <kbd>✉️ تیکت جدید</kbd> ← دسته ← موضوع ← توضیح. جواب را داخل خود بات می‌گیری و از <kbd>📂 تیکت‌های من</kbd> پیگیری می‌کنی. مسائل فوری: <a href="https://t.me/ImXforevr" style="color:var(--cyan)">@ImXforevr</a></p>
+</div>
+
+<h2>🎯 سوالات پرتکرار</h2>
+<details><summary>پاداش تسکم چرا فوری نریخت؟</summary><p>ضد تقلب است! همهٔ تسک‌ها تکتک داوری می‌شوند. معمولاً سریع تأیید می‌شود و پیام نتیجه می‌آید.</p></details>
+<details><summary>کردیتم تمام شد!</summary><p>تسک بزن، بونوس روزانه بگیر، ماموریت‌ها را کامل کن — یا از کیف پول شارژ کن.</p></details>
+<details><summary>فایلی که خریدم باز نمی‌شود</summary><p>تیکت بزن (دسته: محصول) — فایل سالم جایگزین می‌شود یا کردیت برمی‌گردد.</p></details>
+<details><summary>چند اکانت بسازم؟</summary><p>ممنوع! تشخیص داده شود همهٔ موجودی‌ها صفر می‌شود. یک نفر = یک اکانت.</p></details>
+<details><summary>چطور بیشتر بفروشم؟</summary><p>مهارت‌های هرمس را بخوان: در چت بگو «ماهارت listing رو یادم بده» — یا از فروشگاه، پک‌های آموزشی بخر 😉</p></details>
+
+<p class="foot">DropAgentX 0.5.1 · <a href="https://t.me/ImXforevr">🆘 @ImXforevr</a> · ساخته‌شده با ❤️</p>
+</div>
+</body>
+</html>

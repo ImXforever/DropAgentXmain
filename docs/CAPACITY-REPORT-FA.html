@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گزارش ظرفیت DropAgentXBot — شبیه‌سازی دیتابیس ۵۰۰MB</title>
+<style>
+:root{--bg:#030018;--panel:rgba(15,10,35,.8);--border:rgba(255,255,255,.09);--cyan:#00f0ff;--magenta:#ff2d78;--gold:#ffd700;--purple:#a855f7;--green:#00ff88;--orange:#ffaa00;--text:#f0f0ff;--muted:#8b86b0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);line-height:1.9;padding:24px}
+.wrap{max-width:960px;margin:0 auto}
+h1{font-size:1.5rem;margin-bottom:6px}
+h2{font-size:1.15rem;margin:34px 0 12px;color:var(--cyan)}
+h3{font-size:1rem;margin:18px 0 8px}
+.grad{background:linear-gradient(135deg,var(--cyan),var(--purple),var(--magenta));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:20px;margin:14px 0;backdrop-filter:blur(14px)}
+.big{font-size:2.6rem;font-weight:900;font-family:monospace}
+.muted{color:var(--muted);font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+th{background:rgba(0,240,255,.08);color:var(--cyan);padding:9px 12px;text-align:right;border-bottom:1px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--muted)}
+td:first-child{color:var(--text);font-weight:600}
+.num{font-family:monospace;direction:ltr;text-align:left}
+.ok{color:var(--green)} .warn{color:var(--orange)} .bad{color:var(--magenta)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.kpi{border:1px solid var(--border);border-radius:16px;padding:16px;text-align:center}
+.kpi .t{font-size:12px;color:var(--muted)}
+.note{border:1px dashed rgba(255,170,0,.4);background:rgba(255,170,0,.06);border-radius:14px;padding:14px;font-size:13.5px;margin:12px 0}
+.danger{border-color:rgba(255,45,120,.45);background:rgba(255,45,120,.07)}
+.code{background:#070420;border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#a78bfa;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0}
+ul{padding-inline-start:22px;font-size:13.5px;color:var(--muted)}
+li{margin-bottom:6px}
+b{color:var(--text)}
+svg{max-width:100%;height:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.legend span::before{content:'■ ';font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>📊 گزارش ظرفیت <span class="grad">DropAgentXBot</span></h1>
+<p class="muted">روش: شبیه‌سازی واقعی — بازسازی دقیق اسکیمای database.py (۲۷ تیبل + FTS5 + WAL + ۱۳ ایندکس)، درج سینتتیک با همان کوئری‌های برنامه، اندازه‌گیری بایت‌به‌بایت · سقف مورد بررسی: ۵۰۰MB · تاریخ: ۲۰۲۶-۰۸-۲۸</p>
+
+<div class="kpi-grid">
+    <div class="kpi"><div class="big grad">≈۸,۲۰۰</div><div class="t">سقف کاربر ثبت‌نامی — سناریوی واقع‌بینانه (فقط DB)</div></div>
+    <div class="kpi"><div class="big" style="color:var(--gold)">≈۲,۸۵۰</div><div class="t">اگر همه سنگین از AI استفاده کنند</div></div>
+    <div class="kpi"><div class="big" style="color:var(--magenta)">≈۱,۰۵۰</div><div class="t">⚠️ سقف واقعی الان — با فایل‌های محصول روی همین حجم!</div></div>
+    <div class="kpi"><div class="big" style="color:var(--green)">~۱۵</div><div class="t">پیام AI در ثانیه — سقف پردازشی DB (اصلاً گلوگاه نیست)</div></div>
+</div>
+
+<h2>🎯 خلاصه اجرایی</h2>
+<div class="panel">
+<p style="font-size:14.5px">پلتفرمت از نظر <b>سرعت</b> خیلی قویه (مسیرهای مالی با ۴۰هزار عملیات/ثانیه، عملاً بی‌نهایت) — ولی از نظر <b>حجم</b> دو گلوگاه داره:</p>
+<ul style="margin-top:10px">
+    <li>🔴 <b>فایل‌های محصول روی همان Volume</b> — الان واقعی‌ترین سقفِ توست (~۱,۰۵۰ کاربر). فایل‌ها اصلاً لازم نیست روی دیسک خودت باشند (راه‌حل پایین).</li>
+    <li>🟠 <b>لاگ چت AI = ۹۲٪ کل دیتابیس</b> — هر پیام ۲ بار ذخیره می‌شود (chat_messages + آینه FTS) و سقف ۶۰ پیام/کاربر دارد.</li>
+</ul>
+<p style="font-size:13.5px;margin-top:8px" class="muted">نقطه امن عملیاتی (حاشیه ۲۰٪): <b style="color:var(--green)">~۸۴۰ کاربر الان</b> · با فیکس فایل‌ها <b style="color:var(--cyan)">~۶,۵۰۰ کاربر</b></p>
+</div>
+
+<h2>🧪 سناریوهای شبیه‌سازی (اندازه‌گیری واقعی، نه تخمین)</h2>
+<div class="panel">
+<table>
+<tr><th>سناریو</th><th>ترکیب کاربران</th><th>مصرف به‌ازای هر کاربر</th><th>سقف @ ۵۰۰MB</th></tr>
+<tr><td>A — واقع‌بینانه</td><td>۵۵٪ راکد · ۳۰٪ عادی · ۱۲٪ فعال · ۳٪ پاور</td><td class="num">62 KB</td><td class="num ok">~8,234</td></tr>
+<tr><td>B — AI-سنگین</td><td>۱۵٪ راکد · ۳۵٪ عادی · ۳۵٪ فعال · ۱۵٪ پاور (پاسخ‌های بلند AI)</td><td class="num">179 KB</td><td class="num warn">~2,855</td></tr>
+<tr><td>C — A + فایل محصولات روی Volume</td><td>هر ~۸ کاربر ۲ محصول × ۱٫۶۵MB فایل/کاور</td><td class="num">484 KB</td><td class="num bad">~1,056</td></tr>
+</table>
+<p class="muted">نمونه‌های اندازه‌گیری سناریو A: ۱,۰۰۰یوزر=۶۲MB · ۳,۰۰۰=۱۸۳MB · ۶,۰۰۰=۳۶۵MB (رگرسیون خطی، دقت بالا چون خطی بودن تأیید شد)</p>
+</div>
+
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg">
+    <text x="380" y="26" text-anchor="middle" fill="#f0f0ff" font-size="15" font-weight="bold">رشد حجم DB بر حسب تعداد کاربر (اندازه‌گیری واقعی)</text>
+    <line x1="70" y1="270" x2="720" y2="270" stroke="#8b86b0" stroke-width="1"/>
+    <line x1="70" y1="50" x2="70" y2="270" stroke="#8b86b0" stroke-width="1"/>
+    <line x1="70" y1="60" x2="720" y2="60" stroke="#ff2d78" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="715" y="52" fill="#ff2d78" font-size="11" text-anchor="end">سقف 500MB</text>
+    <!-- A line: 62KB/u → 0.062MB/u ; scale: y = 270 - users*(MB)/ (500MB/210px) = 270 - users*0.062*0.42 -->
+    <polyline fill="none" stroke="#00f0ff" stroke-width="2.5" points="100,267.4 270,259.1 440,250.9 610,242.6"/>
+    <!-- B line: 0.179MB/u -->
+    <polyline fill="none" stroke="#ffd700" stroke-width="2.5" points="100,259.1 270,238.0 440,217.0 610,195.9"/>
+    <!-- x labels: 0,2k,4k,6k,8k → x = 100+users*0.085 -->
+    <text x="100" y="288" fill="#8b86b0" font-size="11" text-anchor="middle">۰</text>
+    <text x="270" y="288" fill="#8b86b0" font-size="11" text-anchor="middle">۲هزار</text>
+    <text x="440" y="288" fill="#8b86b0" font-size="11" text-anchor="middle">۴هزار</text>
+    <text x="610" y="288" fill="#8b86b0" font-size="11" text-anchor="middle">۶هزار</text>
+    <text x="715" y="288" fill="#8b86b0" font-size="11">۸هزار</text>
+    <text x="58" y="274" fill="#8b86b0" font-size="10" text-anchor="end">۰</text>
+    <text x="58" y="168" fill="#8b86b0" font-size="10" text-anchor="end">۲۴۳MB</text>
+    <text x="58" y="64" fill="#8b86b0" font-size="10" text-anchor="end">۵۰۰MB</text>
+    <circle cx="610" cy="242.6" r="4" fill="#00f0ff"/>
+    <circle cx="610" cy="195.9" r="4" fill="#ffd700"/>
+    <circle cx="613" cy="78" r="5" fill="#ff2d78"/>
+    <text x="632" y="82" fill="#ff2d78" font-size="11">C (با فایل‌ها): تقاطع در ~۱هزار!</text>
+</svg>
+<div class="legend">
+    <span style="color:#00f0ff">A — واقع‌بینانه</span>
+    <span style="color:#ffd700">B — AI-سنگین</span>
+    <span style="color:#ff2d78">C — + فایل‌های محصول (وضعیت فعلی)</span>
+</div>
+
+<h2>🥧 حجم ۵۰۰MB کجا می‌رود؟ (اندازه‌گیری dbstat روی دیتابیس ۳هزار کاربره)</h2>
+<div class="panel">
+<svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg">
+    <rect x="40" y="40" width="440" height="44" fill="#00f0ff" opacity=".85" rx="6"/>
+    <text x="260" y="67" fill="#030018" font-size="14" font-weight="bold" text-anchor="middle">chat_messages — ۴۴٪</text>
+    <rect x="40" y="96" width="428" height="44" fill="#a855f7" opacity=".85" rx="6"/>
+    <text x="254" y="123" fill="#f0f0ff" font-size="14" font-weight="bold" text-anchor="middle">آینه FTS همان متن‌ها — ۴۸٪</text>
+    <rect x="40" y="152" width="66" height="28" fill="#ffd700" opacity=".85" rx="6"/>
+    <text x="120" y="171" fill="#ffd700" font-size="12">بقیه ۲۳ تیبل + ایندکس‌ها فقط ~۷٪</text>
+</svg>
+<p class="muted">چرا دوبار؟ <code style="color:var(--cyan)">mem_add</code> متن پیام را در <code style="color:var(--cyan)">chat_messages</code> ذخیره می‌کند و برای جستجوی تاریخچه، عین همان متن را در <code style="color:var(--cyan)">chat_fts</code> هم کپی می‌کند (database.py:1374-1386). یعنی هر بایتِ چت = ۲ بایت روی دیسک.</p>
+</div>
+
+<h2>⚡ تست توان عملیاتی (مسیر داغ واقعی روی دیتابیس ۳هزار کاربره)</h2>
+<div class="panel">
+<table>
+<tr><th>عملیات</th><th>زمان</th><th>توان</th><th>تفسیر</th></tr>
+<tr><td>mem_add — هر پیام AI (insert+FTS+prune+commit)</td><td class="num">29.8ms</td><td class="num">34/s</td><td class="ok">هر پیام AI = ۲× این عمل → ~۱۵ پیام/ثانیه سقف DB</td></tr>
+<tr><td>ثبت تراکنش مالی</td><td class="num">0.02ms</td><td class="num">43,907/s</td><td class="ok">هرگز گلوگاه نمی‌شود</td></tr>
+<tr><td>ثبت خرید + کسر اعتبار (تراکنش دوتایی)</td><td class="num">0.02ms</td><td class="num">40,411/s</td><td class="ok">عالی</td></tr>
+<tr><td>mem_recent — خواندن کانتکست هر پیام AI</td><td class="num">6.2ms</td><td class="num">—</td><td class="ok">ناچیز کنار تأخیر LLM (۱-۵ ثانیه)</td></tr>
+<tr><td>جستجوی FTS تاریخچه</td><td class="num">18.5ms</td><td class="num">—</td><td class="ok">قابل قبول</td></tr>
+<tr><td>موج پیک: ۵۰ آپدیت همزمان تلگرام</td><td class="num">3.34s</td><td class="num">15 update/s</td><td class="warn">سقف DB — خیلی بالاتر از نیاز فعلی</td></tr>
+</table>
+<p class="muted">📌 از لاگ واقعی خودت: هر آپدیت ۲۰۰-۴۵۰ms طول می‌کشد که ~۹۵٪ آن تأخیر LLM/تلگرام است، نه دیتابیس. یعنی گلوگاه واقعیِ «تعداد یوزر همزمان» دیتابیس نیست — مدل AI و CPU کانتینر Railway است.</p>
+</div>
+
+<h2>🛠️ نسخه‌های ارتقا — به ترتیب اثر</h2>
+<div class="panel">
+<table>
+<tr><th>#</th><th>اکشن</th><th>تلاش</th><th>سقف جدید</th></tr>
+<tr><td>1</td><td><b>فایل‌ها با file_id تلگرام</b>: موقع آپلود، فایل را دوباره با bot بفرست و <code style="color:var(--cyan)">file_id</code> را در DB ذخیره کن؛ ارسال دانلود = ارسال با file_id. صفر بایت روی Volume!</td><td>~۳۰ خط کد</td><td class="num ok">۱,۰۵۰ → ~۸,۲۰۰ (×۸)</td></tr>
+<tr><td>2</td><td><b>سقف chat: ۶۰→۳۰ پیام</b> (MEMORY_MAX_ROWS) + سقف ذخیره پاسخ assistant به ۲۰۰۰ کاراکتر — کانتکست فقط ۸ پیام اخیر است؛ پیام‌های قدیمیِ ۶هزارکاراکتری عملاً بلااستفاده‌اند</td><td>۲ خط کد</td><td class="num ok">DB ×۲ (~۱۶هزار)</td></tr>
+<tr><td>3</td><td><b>FTS فقط روی پیام‌های کاربر</b> (نه assistant) — جستجو همان کارایی، نصف فضای چت</td><td>~۱۰ خط</td><td class="num ok">DB ×~1.8</td></tr>
+<tr><td>4</td><td><b>ریتنشن تراکنش‌ها</b>: آرشیو/حذف txهای +۱۲ ماه (رشد فعلیشان بی‌سقف است ~۲KB/یوزر/سال)</td><td>cron کوچک</td><td class="num">پایداری بلندمدت</td></tr>
+<tr><td>5</td><td><b>VACUUM ماهانه</b> (خارج ساعت ترافیک): pruneهای مداوم صفحه آزاد زیاد می‌گذارند؛ فایل جمع‌وجود می‌شود</td><td>۱ cron</td><td class="num">-۱۰٪~-۲۵٪ حجم</td></tr>
+</table>
+<div class="code">-- مانیتورینگ مصرف (هر هفته دستی یا cron → به ادمین DM بده):
+SELECT page_count * page_size / 1048576.0 AS mb FROM pragma_page_count(), pragma_page_size();
+SELECT COUNT(*) FROM chat_messages;  -- باید ≈ 60 × کاربران_فعال_چت باشد
+PRAGMA wal_checkpoint(TRUNCATE);     -- بعد از پیک‌ها</div>
+</div>
+
+<h2>✅ جمع‌بندی: چند یوزر توان داری؟</h2>
+<div class="panel">
+<ul>
+    <li>💵 <b>الان (بدون هیچ تغییری):</b> تا <b class="bad">~۸۴۰ کاربر</b> امن (سقف مطلق ~۱,۰۵۰) — گلوگاه فایل‌های محصول است، نه خود دیتابیس!</li>
+    <li>🔧 <b>فقط با فیکس file_id (توصیه فوری):</b> تا <b class="ok">~۶,۵۰۰ کاربر امن</b> (سقف ~۸,۲۰۰)</li>
+    <li>🚀 <b>فیکس file_id + سقف چت ۳۰:</b> تا <b class="ok">~۱۳,۰۰۰ کاربر امن</b> در سناریوی AI-سنگین</li>
+    <li>⏱️ از نظر <b>سرعت/همزمانی</b>: دیتابیس تا ۱۵ پیام AI/ثانیه (≈ ۶۵هزار پیام AI در روز) را راحت هندل می‌کند — یعنی حتی ۱۰هزار کاربر فعال هم از نظر DB مشکلی ندارد؛ محدودکننده بعدی CPU/RAM کانتینر Railway و rate-limit خود LLM خواهد بود، نه SQLite.</li>
+</ul>
+<p class="muted" style="margin-top:8px">آستانه هشدار پیشنهادی: در <b>400MB (۸۰٪)</b> زنگ بزن — اسکریپت‌های شبیه‌سازی: <code>bot-review/sim_capacity.py</code> و <code>bot-review/sim_throughput.py</code> (قابل اجرای مجدد هر وقت فیچر جدیدی داده ذخیره می‌کند).</p>
+</div>
+
+<p class="muted" style="text-align:center;margin-top:24px">DropAgentXBot — Capacity Simulation Report · روش: درج واقعی روی اسکیمای واقعی · ابزار: SQLite 3 + dbstat + رگرسیون خطی</p>
+</div>
+</body>
+</html>

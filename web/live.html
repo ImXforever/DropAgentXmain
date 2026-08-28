@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>داشبورد زنده — DropAgentX</title>
+<meta name="theme-color" content="#0b0e14">
+<link rel="icon" href="/icon.svg">
+<style>
+:root{--bg:#0b0e14;--panel:#131824;--line:#232b3d;--txt:#e8ecf4;--dim:#8b94a8;
+--gold:#f5c451;--green:#34d399;--cyan:#22d3ee;--red:#f87171;--violet:#a78bfa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(900px 460px at 80% -10%,#17203a44,transparent),var(--bg);
+color:var(--txt);font-family:Vazirmatn,Tahoma,sans-serif;min-height:100vh;padding:20px}
+header{max-width:1060px;margin:0 auto 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:1.15rem}.logo b{color:var(--gold)}
+.status{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--dim);
+background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:6px 14px;margin-inline-start:auto}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--red);transition:.3s}
+.dot.live{background:var(--green);box-shadow:0 0 10px var(--green)}
+.dot.poll{background:var(--gold)}
+.grid{max-width:1060px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
+.g{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;text-align:center}
+.g canvas{width:130px;height:130px}
+.g .v{font-size:1.25rem;font-weight:800;margin-top:6px}
+.g .l{color:var(--dim);font-size:.75rem}
+.rows{max-width:1060px;margin:14px auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:680px){.rows{grid-template-columns:1fr}}
+.r{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 18px;
+display:flex;justify-content:space-between;align-items:center}
+.r .k{color:var(--dim);font-size:.85rem}
+.r .val{font-weight:800;font-size:1.05rem}
+.warn{color:var(--gold)} .ok{color:var(--green)} .bad{color:var(--red)}
+.note{max-width:1060px;margin:16px auto 0;text-align:center;color:var(--dim);font-size:.78rem}
+a.login{color:var(--cyan)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🛰 <b>DropAgentX</b> — داشبورد زنده</div>
+  <div class="status"><span class="dot" id="dot"></span><span id="mode">در حال اتصال…</span></div>
+</header>
+
+<div class="grid">
+  <div class="g"><canvas id="gUsers" width="260" height="260"></canvas><div class="v" id="vUsers">—</div><div class="l">کاربر کل (هدف ۸٬۰۰۰)</div></div>
+  <div class="g"><canvas id="gDb" width="260" height="260"></canvas><div class="v" id="vDb">—</div><div class="l">حجم دیتابیس (سقف ۵۰۰MB)</div></div>
+  <div class="g"><canvas id="gSales" width="260" height="260"></canvas><div class="v" id="vSales">—</div><div class="l">فروش امروز</div></div>
+  <div class="g"><canvas id="gCred" width="260" height="260"></canvas><div class="v" id="vCred">—</div><div class="l">کردیت در گردش</div></div>
+</div>
+
+<div class="rows">
+  <div class="r"><span class="k">🆕 کاربر جدید امروز</span><span class="val ok" id="rNew">—</span></div>
+  <div class="r"><span class="k">💵 فروش امروز (کردیت)</span><span class="val" id="rVol">—</span></div>
+  <div class="r"><span class="k">💰 واریزهای در انتظار</span><span class="val" id="rDep">—</span></div>
+  <div class="r"><span class="k">📤 برداشت‌های در انتظار</span><span class="val" id="rWd">—</span></div>
+  <div class="r"><span class="k">📦 محصولات در انتظار تأیید</span><span class="val" id="rPend">—</span></div>
+  <div class="r"><span class="k">🎫 تیکت‌های باز</span><span class="val" id="rTik">—</span></div>
+</div>
+
+<p class="note">به‌روزرسانی هر ۳ ثانیه از طریق <b>Server-Sent Events</b> (HTML5) — اتصال قطع/وصل خودکار.
+<br><a class="login" href="/admin">پنل مدیریت کامل →</a></p>
+
+<script>
+(function(){
+"use strict";
+var $ = function(id){return document.getElementById(id);};
+var dot = $("dot"), mode = $("mode");
+var es = null, pollT = null, fails = 0;
+var faD = ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+function fa(n){ return String(n).replace(/\d/g, function(d){return faD[+d];}); }
+function fmt(n){ return fa(Math.round(+n||0).toLocaleString("en-US")).replace(/,/g,"٬"); }
+
+/* ── گیج Canvas (HTML5 Canvas 2D) ── */
+function gauge(canvasId, ratio, color, sub){
+  var cv = $(canvasId); if(!cv) return;
+  var ctx = cv.getContext("2d");
+  var w = cv.width, h = cv.height, cx = w/2, cy = h/2, r = w/2-14;
+  ctx.clearRect(0,0,w,h);
+  ctx.lineWidth = 13; ctx.lineCap = "round";
+  ctx.strokeStyle = "#232b3d";
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI*.75, Math.PI*2.25); ctx.stroke();
+  ratio = Math.max(0, Math.min(1, ratio));
+  if(ratio > 0){
+    var grad = ctx.createLinearGradient(0,0,w,h);
+    grad.addColorStop(0, color); grad.addColorStop(1, "#a78bfa");
+    ctx.strokeStyle = grad;
+    ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI*.75, Math.PI*.75 + Math.PI*1.5*ratio);
+    ctx.stroke();
+  }
+  ctx.fillStyle = "#e8ecf4"; ctx.font = "bold 30px Vazirmatn, Tahoma";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText(fa(Math.round(ratio*100)) + "٪", cx, cy-8);
+  ctx.fillStyle = "#8b94a8"; ctx.font = "15px Vazirmatn, Tahoma";
+  ctx.fillText(sub || "", cx, cy+22);
+}
+
+function apply(d){
+  var dbMb = (d.db_bytes||0)/1048576;
+  gauge("gUsers", (d.users_total||0)/8000, "#22d3ee", fmt(d.users_total));
+  gauge("gDb", dbMb/500, dbMb>400?"#f87171":(dbMb>200?"#f5c451":"#34d399"), dbMb.toFixed(1)+"MB");
+  var sToday = d.sales_today||0;
+  gauge("gSales", Math.min(1, sToday/50), "#34d399", fmt(sToday));
+  var cred = d.credits_circulating||0;
+  gauge("gCred", Math.min(1, cred/500000), "#a78bfa", fmt(cred));
+  $("vUsers").textContent = fmt(d.users_total);
+  $("vDb").textContent = dbMb.toFixed(1) + " MB";
+  $("vSales").textContent = fmt(sToday);
+  $("vCred").textContent = fmt(cred);
+  $("rNew").textContent = fmt(d.users_new||0);
+  $("rVol").textContent = fmt(d.volume_today||0);
+  $("rDep").textContent = fmt(d.deposits_pending||0);
+  $("rWd").textContent  = fmt(d.withdrawals_pending||0);
+  $("rPend").textContent = fmt(d.products_pending||0);
+  $("rTik").textContent = fmt(d.tickets_open||0);
+}
+
+function setMode(cls, txt){ dot.className = "dot " + cls; mode.textContent = txt; }
+
+/* ── SSE (EventSource — HTML5) + فالبک polling ── */
+function startPoll(){
+  if(pollT) return;
+  setMode("poll", "حالت جایگزین (polling)");
+  async function tick(){
+    try{
+      var r = await fetch("/api/admin/stats", {credentials:"same-origin"});
+      if(r.status === 401){ location.href = "/login"; return; }
+      apply(await r.json());
+      setMode("poll", "حالت جایگزین — هر ۵ ثانیه");
+    }catch(_){ setMode("", "قطع — تلاش دوباره…"); }
+  }
+  tick(); pollT = setInterval(tick, 5000);
+}
+function startSSE(){
+  try{
+    es = new EventSource("/api/admin/stream");
+    es.onopen = function(){ fails = 0; setMode("live", "زنده — هر ۳ ثانیه"); };
+    es.onmessage = function(ev){
+      try{ apply(JSON.parse(ev.data)); }catch(_){}
+    };
+    es.onerror = function(){
+      if(es && es.readyState === EventSource.CLOSED){
+        fails++;
+        if(fails >= 3){ es.close(); startPoll(); return; }
+        setMode("", "قطع موقت — اتصال دوباره…");
+        setTimeout(startSSE, 3000);
+      }
+    };
+  }catch(_){ startPoll(); }
+}
+fetch("/api/admin/stats", {credentials:"same-origin"})
+  .then(function(r){
+    if(r.status === 401){ location.href = "/login"; return; }
+    startSSE();
+  })
+  .catch(function(){ location.href = "/login"; });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>先輩 SenPai · Neural OS — Elon Musk Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="/senpai/app.css">
+</head>
+<body>
+    <!-- ══ SHARED ICON SPRITE ══
+         One unified stroke-based icon set (Feather-style) used across every
+         header/toolbar/input button, replacing the old mix of emoji + plain
+         text labels. Icons inherit color via currentColor so they follow
+         the active theme automatically. -->
+    <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+        <defs>
+            <symbol id="icon-cpu" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></symbol>
+            <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+            <symbol id="icon-zen" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></symbol>
+            <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+            <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6z"/></symbol>
+            <symbol id="icon-volume" viewBox="0 0 24 24"><polygon points="4,10 8,10 12,5 12,19 8,14 4,14"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+            <symbol id="icon-volume-off" viewBox="0 0 24 24"><polygon points="4,10 8,10 12,5 12,19 8,14 4,14"/><path d="M23 9l-6 6M17 9l6 6"/></symbol>
+            <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/></symbol>
+            <symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+            <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m3 0-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/><path d="M10 11v6M14 11v6"/></symbol>
+            <symbol id="icon-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></symbol>
+            <symbol id="icon-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" stroke="none"/></symbol>
+            <symbol id="icon-paperclip" viewBox="0 0 24 24"><path d="M21 11.5l-9.2 9.2a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-8.8 8.8a2 2 0 0 1-3-3l8-8"/></symbol>
+            <symbol id="icon-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+            <symbol id="icon-dna" viewBox="0 0 24 24"><path d="M7 2c0 5 10 5 10 10s-10 5-10 10M17 2c0 5-10 5-10 10s10 5 10 10"/><path d="M8 7h8M8 17h8"/></symbol>
+            <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+            <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M12 2l2 6 6 1-4.5 4.5L17 20l-5-3-5 3 1.5-6.5L4 9l6-1z"/></symbol>
+            <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></symbol>
+            <symbol id="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></symbol>
+            <symbol id="icon-more" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></symbol>
+            <symbol id="icon-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+            <symbol id="icon-arrow-down" viewBox="0 0 24 24"><path d="M12 4v16M6 14l6 6 6-6"/></symbol>
+        </defs>
+    </svg>
+    <div class="hex-bg"></div>
+
+    <div class="app-container" id="appContainer">
+        <!-- ══ BRAIN SECTION ══ -->
+        <div class="brain-section" id="brainSection">
+            <div class="hud-overlay" id="hudOverlay">
+                <div class="corner-bracket bracket-tl"></div>
+                <div class="corner-bracket bracket-tr"></div>
+                <div class="corner-bracket bracket-bl"></div>
+                <div class="corner-bracket bracket-br"></div>
+                <div class="scan-line"></div>
+                <div class="arc-ring arc-ring-1"></div>
+                <div class="arc-ring arc-ring-2"></div>
+                <div class="arc-ring arc-ring-3"></div>
+                <div class="status-labels">
+                    <div class="status-label">
+                        <span class="status-dot" id="linkDot"></span>
+                        <span id="linkLabel">Neural Link: Active</span>
+                    </div>
+                    <div class="status-label" style="font-size:7px;opacity:0.65;">
+                        <span id="stateLabel">READY</span>
+                    </div>
+                    <div class="status-label" id="micStatusLabel" style="display:none;color:var(--accent-red);">
+                        <span class="status-dot recording" id="micDot"></span> REC · listening
+                    </div>
+                </div>
+                <div class="data-readouts">
+                    <div class="data-readout">NODES: <span id="nodeCountDisplay">1</span></div>
+                    <div class="data-readout">SYNAPSES: <span id="connCountDisplay">0</span></div>
+                    <div class="data-readout">LATENCY: <span id="latencyDisplay">--</span> ms</div>
+                    <div class="data-readout">STRENGTH: <span class="mint" id="strengthDisplay">98.1</span> %</div>
+                    <div class="data-readout">PROVIDER: <span class="violet" id="providerDisplay">Ollama</span></div>
+                    <div class="data-readout">MODEL: <span class="violet" id="modelDisplay">—</span></div>
+                </div>
+                <button class="dna-legend-toggle" id="dnaLegendToggle" title="Show Neural DNA type legend" aria-expanded="false"><svg class="btn-icon"><use href="#icon-dna" xlink:href="#icon-dna"/></svg><span>DNA</span></button>
+                <div class="dna-legend-panel" id="dnaLegendPanel" role="tooltip" aria-hidden="true">
+                    <div class="dna-legend-title">NEURAL DNA · 10 TYPES</div>
+                    <div class="dna-legend-list" id="dnaLegendList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ CHAT PANEL ══ -->
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <span class="chat-header-title">先輩 SENPAI <span class="badge">ELON EDITION</span></span>
+                <div class="header-actions">
+                    <!-- Model switcher dropdown -->
+                    <select class="model-switcher" id="headerModelSwitcher" title="Switch model on the fly"></select>
+
+                    <!-- Group 1: modes — how SenPai behaves -->
+                    <div class="header-group group-modes">
+                        <button class="hud-btn agent-toggle-btn" id="agentToggleBtn" title="Toggle Agent Vibe (chain-of-thought, tools, consciousness bar)">
+                            <svg class="btn-icon"><use href="#icon-cpu" xlink:href="#icon-cpu"/></svg><span>AGENT</span>
+                        </button>
+                        <button class="hud-btn mission-btn" id="missionModeBtn" title="Mission Mode — decompose a goal into sub-tasks">
+                            <svg class="btn-icon"><use href="#icon-target" xlink:href="#icon-target"/></svg><span>MISSION</span>
+                        </button>
+                        <button class="hud-btn icon-only" id="zenToggleBtn" title="Zen mode (fullscreen chat)">
+                            <svg class="btn-icon"><use href="#icon-zen" xlink:href="#icon-zen"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Group 2: tools — acting on the current conversation -->
+                    <div class="header-group group-tools">
+                        <button class="hud-btn icon-only" id="searchToggleBtn" title="Search messages">
+                            <svg class="btn-icon"><use href="#icon-search" xlink:href="#icon-search"/></svg>
+                        </button>
+                        <button class="hud-btn icon-only" id="convListBtn" title="Conversation history">
+                            <svg class="btn-icon"><use href="#icon-folder" xlink:href="#icon-folder"/></svg>
+                        </button>
+                        <button class="hud-btn icon-only" id="voiceToggleBtn" title="Text-to-speech: off">
+                            <svg class="btn-icon"><use href="#icon-volume-off" xlink:href="#icon-volume-off"/></svg>
+                        </button>
+                        <button class="hud-btn icon-only" id="exportMdBtn" title="Export as Markdown">
+                            <svg class="btn-icon"><use href="#icon-download" xlink:href="#icon-download"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Group 3.5: extras — ported/original features (Memory, Focus, Council, Analytics) -->
+                    <div class="header-group group-extras">
+                        <button class="hud-btn icon-only" id="memoryBtn" title="Local memory &amp; mood">
+                            <svg class="btn-icon"><use href="#icon-cpu" xlink:href="#icon-cpu"/></svg>
+                        </button>
+                        <button class="hud-btn icon-only" id="focusModeBtn" title="Focus mode (Ctrl+.)">
+                            <svg class="btn-icon"><use href="#icon-zen" xlink:href="#icon-zen"/></svg>
+                        </button>
+                        <button class="hud-btn icon-only" id="councilBtn" title="Council Mode — compare two models on your last prompt">
+                            <svg class="btn-icon"><use href="#icon-target" xlink:href="#icon-target"/></svg>
+                        </button>
+                        <button class="hud-btn icon-only" id="analyticsBtn" title="Session analytics">
+                            <svg class="btn-icon"><use href="#icon-folder" xlink:href="#icon-folder"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Group 3: system — config + destructive action, kept apart on purpose -->
+                    <div class="header-group group-system">
+                        <button class="hud-btn" id="configBtn" title="System configuration">
+                            <svg class="btn-icon"><use href="#icon-settings" xlink:href="#icon-settings"/></svg><span>CONFIG</span>
+                        </button>
+                        <button class="hud-btn danger" id="clearChatBtn" title="Clear chat history (asks for confirmation)">
+                            <svg class="btn-icon"><use href="#icon-trash" xlink:href="#icon-trash"/></svg><span>CLEAR</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consciousness Status Bar (Agent Vibe) -->
+            <div class="consciousness-bar" id="consciousnessBar">
+                <span class="cb-label">CONSCIOUSNESS</span>
+                <div class="cb-wave" id="cbWave"></div>
+                <span class="cb-state cb-idle" id="cbStateLabel">IDLE</span>
+            </div>
+
+            <!-- Chain-of-Thought Panel (Agent Vibe) -->
+            <div class="cot-panel" id="cotPanel">
+                <div class="cot-panel-header" id="cotPanelHeader">
+                    <span style="display:flex;align-items:center;gap:5px;"><svg class="btn-icon"><use href="#icon-cpu" xlink:href="#icon-cpu"/></svg> Chain of Thought <span class="cot-chevron">▾</span></span>
+                    <span id="cotStepCount" style="opacity:0.6;">0 steps</span>
+                </div>
+                <div class="cot-body" id="cotBody"></div>
+            </div>
+
+            <!-- Tool Bar (Agent Vibe) -->
+            <div class="tool-bar" id="toolBar">
+                <button class="tool-btn" id="toolWebSearchBtn" title="Enable Web Search tool"><svg class="btn-icon"><use href="#icon-globe" xlink:href="#icon-globe"/></svg><span>Web Search</span></button>
+                <button class="tool-btn" id="toolCodeRunnerBtn" title="Run last JS code block"><svg class="btn-icon"><use href="#icon-play" xlink:href="#icon-play"/></svg><span>Code Runner</span></button>
+                <button class="tool-btn" id="toolFileExplorerBtn" title="Show attached files"><svg class="btn-icon"><use href="#icon-folder" xlink:href="#icon-folder"/></svg><span>File Explorer</span></button>
+            </div>
+
+            <!-- File Explorer Panel (Agent Vibe) -->
+            <div class="file-explorer-panel" id="fileExplorerPanel">
+                <div style="color:var(--agent-amber);margin-bottom:6px;display:flex;align-items:center;gap:5px;"><svg class="btn-icon"><use href="#icon-folder" xlink:href="#icon-folder"/></svg> session-context/</div>
+                <div id="fileExplorerTree"></div>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="tab-bar" id="tabBar">
+                <!-- Tabs will be rendered dynamically -->
+                <button class="tab-add-btn" id="tabAddBtn" title="New conversation tab"><svg class="btn-icon"><use href="#icon-plus" xlink:href="#icon-plus"/></svg></button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar" id="searchBar">
+                <input type="text" id="searchInput" placeholder="Search messages…" autocomplete="off">
+                <button class="search-regex-toggle" id="searchRegexToggle" title="Enable regex">.*</button>
+                <span class="search-count" id="searchCount"></span>
+                <button class="search-close" id="searchClose"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button>
+            </div>
+
+            <!-- Search Results Panel (overlay) -->
+            <div class="search-results-panel" id="searchResultsPanel">
+                <h4 style="display:flex;align-items:center;gap:5px;"><svg class="btn-icon"><use href="#icon-search" xlink:href="#icon-search"/></svg> Search Results <button class="hud-btn icon-only" id="closeSearchResults" style="margin-inline-start:auto;width:22px;height:22px;padding:4px;"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button></h4>
+                <div id="searchResultsList"></div>
+            </div>
+
+            <div class="token-meter" id="tokenMeter" title="Session token usage vs. budget">
+                <div class="token-meter-row">
+                    <button class="tm-label" id="tmToggle" type="button" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;">
+                        <svg class="btn-icon" id="tmChevron" style="width:9px;height:9px;transition:transform .15s;"><use href="#icon-chevron-down" xlink:href="#icon-chevron-down"/></svg>
+                        Token Budget
+                    </button>
+                    <span class="tm-stats">
+                        <span>used <b class="used" id="tmUsedTokens">0</b></span>
+                        <span>left <b id="tmRemainingTokens">128,000</b></span>
+                        <span>cost <b class="cost" id="tmCost">$0.0000</b></span>
+                        <span>last <b id="tmLastReq">— tok / — ms</b></span>
+                    </span>
+                </div>
+                <div class="tm-gauge" id="tmGauge"></div>
+            </div>
+
+            <!-- Pinned Messages Area -->
+            <div class="pinned-messages-area" id="pinnedArea">
+                <div class="pinned-title"><svg class="btn-icon"><use href="#icon-pin" xlink:href="#icon-pin"/></svg> Pinned Messages</div>
+                <div id="pinnedMessagesList"></div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer"></div>
+            <button class="scroll-bottom-btn" id="scrollBottomBtn" title="Scroll to bottom"><svg class="btn-icon"><use href="#icon-arrow-down" xlink:href="#icon-arrow-down"/></svg></button>
+            <div class="file-toast" id="fileToast"></div>
+
+            <div class="input-area">
+                <div class="input-row-top">
+                    <button class="icon-btn" id="micBtn" title="Voice input (Ctrl+M)"><svg class="btn-icon"><use href="#icon-mic" xlink:href="#icon-mic"/></svg></button>
+                    <button class="icon-btn" id="attachBtn" title="Attach file / image"><svg class="btn-icon"><use href="#icon-paperclip" xlink:href="#icon-paperclip"/></svg></button>
+                    <button class="icon-btn" id="cancelBtn" title="Cancel current request" style="display:none;"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button>
+                    <div class="input-wrapper">
+                        <textarea class="chat-input" id="chatInput" rows="1" placeholder="پیامتو بنویس… / Type your message…" dir="auto"></textarea>
+                    </div>
+                    <button class="send-btn" id="sendBtn" title="Send (Enter)">
+                        <svg viewBox="0 0 24 24"><polygon points="4,4 20,12 4,20 6,12"/></svg>
+                    </button>
+                </div>
+                <div class="image-preview-container" id="imagePreviewContainer"></div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*,.txt,.pdf,.json,.csv,.xml,.md,.py,.js,.html,.css,.log,.sh,.yaml,.yml,.toml" multiple style="display:none;">
+        </div>
+    </div>
+
+    <!-- Conversation List Sidebar -->
+    <div class="conv-list" id="convList">
+        <h4 style="display:flex;align-items:center;gap:6px;"><svg class="btn-icon"><use href="#icon-folder" xlink:href="#icon-folder"/></svg> Conversations</h4>
+        <div id="convListItems"></div>
+        <button class="hud-btn" id="exportConvBtn" style="margin-top:10px;width:100%;">Export Current</button>
+        <button class="hud-btn danger" id="clearAllConvsBtn" style="margin-top:6px;width:100%;">Clear All</button>
+    </div>
+
+    <!-- Command Palette -->
+    <div class="command-palette" id="commandPalette">
+        <div class="cp-box">
+            <input class="cp-input" id="cpInput" placeholder="Type a command…" autocomplete="off">
+            <div class="cp-results" id="cpResults"></div>
+        </div>
+    </div>
+
+    <!-- Mission Manager Overlay (Agent Vibe) -->
+    <div class="mission-overlay" id="missionOverlay">
+        <div class="mission-panel">
+            <h3><svg class="btn-icon"><use href="#icon-target" xlink:href="#icon-target"/></svg> Mission Mode <button class="hud-btn mission-close" id="missionCloseBtn"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button></h3>
+            <div class="mission-body">
+                <div id="missionInputWrap">
+                    <label style="font-size:10px;color:var(--text-secondary);display:block;margin-bottom:6px;">
+                        Describe a multi-step goal. SenPai will break it into sub-tasks and work through them one by one.
+                    </label>
+                    <textarea id="missionGoalInput" placeholder="e.g. Build a dashboard that analyzes live gold prices…"></textarea>
+                    <div class="mission-actions">
+                        <button class="hud-btn" id="missionStartBtn" style="flex:1;"><svg class="btn-icon"><use href="#icon-play" xlink:href="#icon-play"/></svg> Decompose &amp; Start</button>
+                    </div>
+                </div>
+                <div class="mission-tasklist" id="missionTaskList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Memory Popover (local keyword memory + mood, ported from Xpai) -->
+    <div class="memory-popover" id="memoryPopover">
+        <h4>🧠 Local Memory <button class="hud-btn icon-only" id="memoryPopoverClose"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button></h4>
+        <div class="hint" style="padding:0 2px 8px;">Heuristic, on-device keyword tracking — not real embeddings. Mood: <span id="memoryPopoverMood" class="mood-badge">neutral</span></div>
+        <div id="memoryPopoverList" class="memory-list"></div>
+    </div>
+
+    <!-- Council Mode Modal — side-by-side dual-model comparison (new feature) -->
+    <div class="council-overlay" id="councilOverlay">
+        <div class="council-panel">
+            <h3>⚖️ Council Mode <button class="hud-btn icon-only" id="councilCloseBtn"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button></h3>
+            <div class="council-prompt-row">
+                <textarea id="councilPromptInput" placeholder="Ask both models the same question…" rows="2"></textarea>
+                <button class="hud-btn active-btn" id="councilRunBtn">Ask Both</button>
+            </div>
+            <div class="council-columns">
+                <div class="council-col">
+                    <div class="council-col-head" id="councilColHeadA">Main provider</div>
+                    <div class="council-col-body" id="councilColBodyA">—</div>
+                </div>
+                <div class="council-col">
+                    <div class="council-col-head" id="councilColHeadB">Comparison provider</div>
+                    <div class="council-col-body" id="councilColBodyB">Set a comparison provider in Settings → Extras first.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Dashboard Modal (new feature — pure canvas, no chart library) -->
+    <div class="analytics-overlay" id="analyticsOverlay">
+        <div class="analytics-panel">
+            <h3>📊 Session Analytics <button class="hud-btn icon-only" id="analyticsCloseBtn"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button></h3>
+            <div class="analytics-stats" id="analyticsStats"></div>
+            <canvas id="analyticsCanvas" width="640" height="220"></canvas>
+            <div class="hint" style="margin-top:6px;">Tokens per message, most recent on the right. Local to this browser tab's session only.</div>
+        </div>
+    </div>
+
+    <!-- Live price ticker (ported from Xpai; off by default, client-only demo) -->
+    <div class="price-ticker" id="priceTicker" title="Public price API, called directly from your browser — demo only">
+        <span id="tickerContent">Loading prices…</span>
+    </div>
+
+    <!-- ══ SENPAI SOCIAL CTA — 3D logo orb + follow panel ══ -->
+    <div class="senpai-cta" id="senpaiCta">
+        <div class="cta-panel" id="ctaPanel">
+            <div class="cta-panel-title">先輩 <span>FOLLOW SENPAI</span></div>
+            <a class="cta-link cta-youtube" href="https://www.youtube.com/@Matin_SenPai" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.5v-7l6.3 3.5-6.3 3.5z"/></svg>
+                <span>YouTube</span>
+            </a>
+            <a class="cta-link cta-github" href="https://github.com/MatinSenPai" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5 3.3 9.3 7.9 10.8.6.1.8-.2.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.8C23.5 5.7 18.3.5 12 .5z"/></svg>
+                <span>GitHub</span>
+            </a>
+            <a class="cta-link cta-x" href="https://x.com/MatinSenPai" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.4 8.4L23 22h-6.8l-5.3-6.9L4.8 22H1.7l7.9-9L1 2h7l4.8 6.3L18.9 2zm-1.2 18h1.9L7.4 4H5.4l12.3 16z"/></svg>
+                <span>X</span>
+            </a>
+        </div>
+        <button class="cta-orb" id="ctaOrbBtn" aria-label="Follow SenPai — open social links" title="Follow SenPai">
+            <canvas id="ctaLogoCanvas"></canvas>
+        </button>
+    </div>
+
+    <!-- ══ SETTINGS OVERLAY ══ -->
+    <div class="settings-overlay" id="settingsOverlay">
+        <div class="settings-panel" id="settingsPanel">
+            <button class="close-settings" id="closeSettings"><svg class="btn-icon"><use href="#icon-x" xlink:href="#icon-x"/></svg></button>
+            <h3>SYSTEM CONFIGURATION v9.0</h3>
+            <div class="settings-subtitle">provider · model · budget · behavior · voice · theme · prompts · advanced · import/export</div>
+
+            <div class="settings-body">
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-tab="provider">Provider</button>
+                <button class="settings-tab" data-tab="model">Model</button>
+                <button class="settings-tab" data-tab="budget">Budget</button>
+                <button class="settings-tab" data-tab="behavior">Behavior</button>
+                <button class="settings-tab" data-tab="voice">Voice</button>
+                <button class="settings-tab" data-tab="theme">Theme</button>
+                <button class="settings-tab" data-tab="prompts">Prompts</button>
+                <button class="settings-tab" data-tab="advanced">Advanced</button>
+                <button class="settings-tab" data-tab="importexport">Import/Export</button>
+                <button class="settings-tab" data-tab="memory">Memory</button>
+                <button class="settings-tab" data-tab="extras">Extras</button>
+                <button class="settings-tab" data-tab="accessibility">Accessibility</button>
+                <button class="settings-tab" data-tab="security">Security</button>
+            </div>
+
+            <div class="settings-tabpanels">
+            <!-- TAB: Provider -->
+            <div class="settings-tabpanel active" data-tabpanel="provider">
+                <div class="setting-group">
+                    <label>Provider</label>
+                    <select id="providerSelect">
+                        <option value="9router">9Router (your local endpoint)</option>
+                        <option value="ollama">Ollama (local LLM)</option>
+                        <option value="openrouter">OpenRouter (cloud, any model)</option>
+                        <option value="gemini">Google Gemini</option>
+                        <option value="lmstudio">LM Studio (local, OpenAI-compatible)</option>
+                        <option value="custom">Custom OpenAI-compatible endpoint</option>
+                    </select>
+                    <div class="hint" id="providerHint">Ollama runs models entirely on your machine — no API key required.</div>
+                </div>
+                <div class="setting-group" id="apiKeyGroup">
+                    <label>API Key</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="apiKeyInput" placeholder="Enter API key…">
+                        <button class="password-toggle" id="toggleApiKey">SHOW</button>
+                    </div>
+                    <div class="hint">Stored in local storage (encrypted with Web Crypto API). Never sent except to your provider.</div>
+                </div>
+                <div class="setting-group" id="baseUrlGroup" style="display:none;">
+                    <label id="baseUrlLabel">Local Server URL</label>
+                    <input type="text" id="baseUrlInput" placeholder="http://localhost:11434">
+                    <div class="ollama-url-hint" id="baseUrlHint">Default Ollama URL: http://localhost:11434</div>
+                </div>
+            </div>
+
+            <!-- TAB: Model -->
+            <div class="settings-tabpanel" data-tabpanel="model">
+                <div class="setting-group">
+                    <label>Model</label>
+                    <div class="input-with-btn">
+                        <select id="modelSelect"></select>
+                        <button id="refreshModelsBtn">↻ Fetch</button>
+                    </div>
+                    <div class="model-fetch-status" id="modelFetchStatus"></div>
+                </div>
+                <div class="setting-group">
+                    <label>Or enter any model ID manually</label>
+                    <div class="custom-model-row">
+                        <input type="text" id="customModelInput" placeholder="e.g. llama3.3:70b, qwen2.5-coder:32b…">
+                        <button id="addCustomModelBtn">Use This</button>
+                    </div>
+                    <div class="hint">Works with any model string your provider accepts.</div>
+                </div>
+                <div class="setting-group pricing-grid">
+                    <div>
+                        <label>Input $ / 1M tokens</label>
+                        <input type="number" id="priceInInput" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label>Output $ / 1M tokens</label>
+                        <input type="number" id="priceOutInput" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Budget -->
+            <div class="settings-tabpanel" data-tabpanel="budget">
+                <div class="setting-group token-budget-row">
+                    <div>
+                        <label>Session Token Budget</label>
+                        <input type="number" id="tokenBudgetInput" step="1000" min="0" placeholder="128000">
+                    </div>
+                    <div>
+                        <label>Context Window (max)</label>
+                        <input type="number" id="contextWindowInput" step="1000" min="0" placeholder="128000">
+                    </div>
+                </div>
+                <div class="hint" style="margin-top:-6px;margin-bottom:10px;">The gauge tracks cumulative tokens used this session. Alerts at 80% and 95%.</div>
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="estimateTokensCheckbox" checked>
+                    <label for="estimateTokensCheckbox">Estimate tokens client-side when provider doesn't report usage</label>
+                </div>
+                <div class="setting-group">
+                    <label>Sliding Window (max messages in context)</label>
+                    <input type="number" id="slidingWindowInput" min="1" max="200" placeholder="20">
+                    <div class="hint">Limits the number of past messages sent to the model. Helps control token usage.</div>
+                </div>
+                <button class="hud-btn" id="resetTokenMeterBtn" style="margin-top:6px;">Reset counters to zero</button>
+            </div>
+
+            <!-- TAB: Behavior -->
+            <div class="settings-tabpanel" data-tabpanel="behavior">
+                <div class="setting-group">
+                    <label>System Prompt</label>
+                    <textarea id="systemPromptInput" placeholder="Custom system instructions…">You are SenPai, an advanced AI debugging assistant with a living neural network interface. Respond concisely and precisely. Use markdown and code blocks when helpful. Be analytical and professional.</textarea>
+                </div>
+                <div class="setting-group">
+                    <label>Temperature: <span class="temp-display" id="tempDisplay">0.8</span></label>
+                    <input type="range" class="temp-slider" id="tempSlider" min="0" max="2" step="0.05" value="0.8">
+                </div>
+                <div class="setting-group">
+                    <label>Max Output Tokens</label>
+                    <input type="number" id="maxTokensInput" step="256" min="1" placeholder="4096">
+                </div>
+                <div class="setting-group">
+                    <label>Top-P (optional)</label>
+                    <input type="number" id="topPInput" step="0.01" min="0" max="1" placeholder="0.95">
+                    <div class="hint">Nucleus sampling parameter. Leave empty for default.</div>
+                </div>
+                <div class="setting-group">
+                    <label>Frequency Penalty (optional)</label>
+                    <input type="number" id="freqPenaltyInput" step="0.01" min="0" max="2" placeholder="0.0">
+                </div>
+                <div class="setting-group">
+                    <label>Presence Penalty (optional)</label>
+                    <input type="number" id="presPenaltyInput" step="0.01" min="0" max="2" placeholder="0.0">
+                </div>
+            </div>
+
+            <!-- TAB: Voice -->
+            <div class="settings-tabpanel" data-tabpanel="voice">
+                <div class="setting-group">
+                    <label>Voice Language</label>
+                    <select id="voiceLangSelect">
+                        <option value="en-US">English (US)</option>
+                        <option value="en-GB">English (UK)</option>
+                        <option value="fa-IR">فارسی</option>
+                        <option value="ar-SA">العربية</option>
+                        <option value="fr-FR">Français</option>
+                        <option value="de-DE">Deutsch</option>
+                        <option value="es-ES">Español</option>
+                        <option value="ja-JP">日本語</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- TAB: Theme -->
+            <div class="settings-tabpanel" data-tabpanel="theme">
+                <div class="setting-group">
+                    <label>Theme</label>
+                    <div class="theme-selector">
+                        <button class="theme-btn" data-theme="github-dark">GitHub Dark</button>
+                        <button class="theme-btn" data-theme="github-light">GitHub Light</button>
+                        <button class="theme-btn" data-theme="dracula">Dracula</button>
+                        <button class="theme-btn" data-theme="solarized-dark">Solarized Dark</button>
+                        <button class="theme-btn" data-theme="high-contrast">High Contrast</button>
+                        <button class="theme-btn system-theme" data-theme="system">System Default</button>
+                    </div>
+                    <div class="hint" style="margin-top:6px;">Changes the entire UI color scheme. Your preference is saved locally.</div>
+                </div>
+            </div>
+
+            <!-- TAB: Prompts Library -->
+            <div class="settings-tabpanel" data-tabpanel="prompts">
+                <div class="setting-group">
+                    <label>Saved Prompts Library</label>
+                    <select id="promptLibrarySelect">
+                        <option value="">-- Select a saved prompt --</option>
+                    </select>
+                    <button class="hud-btn" id="loadPromptBtn" style="margin-top:4px;">Load Selected</button>
+                    <button class="hud-btn danger" id="deletePromptBtn" style="margin-top:4px;">Delete Selected</button>
+                </div>
+                <div class="setting-group">
+                    <label>Save Current System Prompt</label>
+                    <div style="display:flex;gap:6px;">
+                        <input type="text" id="promptNameInput" placeholder="Give this prompt a name…">
+                        <button class="hud-btn active-btn" id="savePromptBtn">Save</button>
+                    </div>
+                </div>
+                <div class="hint">Prompts are stored locally. You can switch between them quickly.</div>
+            </div>
+
+            <!-- TAB: Advanced -->
+            <div class="settings-tabpanel" data-tabpanel="advanced">
+                <div class="setting-group">
+                    <label>Stop Sequences (comma separated, optional)</label>
+                    <input type="text" id="stopSequencesInput" placeholder="e.g. 'end', 'stop'">
+                    <div class="hint">Model will stop generating when any of these sequences are encountered.</div>
+                </div>
+                <div class="setting-group">
+                    <label>Seed (optional, for deterministic output)</label>
+                    <input type="number" id="seedInput" step="1" min="0" placeholder="e.g. 42">
+                    <div class="hint">Set a fixed seed to make responses reproducible.</div>
+                </div>
+                <div class="setting-group">
+                    <label>Response Format</label>
+                    <select id="responseFormatSelect">
+                        <option value="">Default</option>
+                        <option value="json_object">JSON Object</option>
+                    </select>
+                    <div class="hint">Force model to output JSON (only works with some providers).</div>
+                </div>
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="useWebSocketCheckbox">
+                    <label for="useWebSocketCheckbox">Use WebSocket for Ollama (experimental, lower latency)</label>
+                </div>
+                <button class="hud-btn" id="factoryResetBtn" style="margin-top:6px;">Factory Reset All Settings</button>
+                <div class="hint" style="margin-top:4px;">Resets everything to default, including API keys, prompts, and token counters.</div>
+            </div>
+
+            <!-- TAB: Import/Export -->
+            <div class="settings-tabpanel" data-tabpanel="importexport">
+                <div class="setting-group">
+                    <label>Export Profile</label>
+                    <button class="hud-btn active-btn" id="exportProfileBtn" style="width:100%;">Export all settings as JSON</button>
+                    <div class="hint">Includes provider settings, API keys (encrypted), prompts, token budget, and model list.</div>
+                </div>
+                <div class="setting-group">
+                    <label>Import Profile</label>
+                    <input type="file" id="importProfileInput" accept=".json" style="display:none;">
+                    <button class="hud-btn" id="importProfileBtn" style="width:100%;">Import settings from JSON file</button>
+                    <div class="hint">This will overwrite all current settings. Be careful with API keys.</div>
+                </div>
+            </div>
+
+            <!-- TAB: Memory (ported + rebuilt from Xpai's keyword-memory concept) -->
+            <div class="settings-tabpanel" data-tabpanel="memory">
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="memoryEnabledCheckbox">
+                    <label for="memoryEnabledCheckbox">Enable long-term memory (local only)</label>
+                </div>
+                <div class="hint">SenPai extracts recurring keywords/topics from your messages on-device and keeps a small ranked list below. Nothing is sent anywhere except as normal chat context — this is a local heuristic, not real semantic embedding search.</div>
+                <div class="setting-group">
+                    <label>Remembered topics <span id="memoryCount" style="opacity:.6;font-weight:400;"></span></label>
+                    <div id="memoryList" class="memory-list"></div>
+                    <button class="hud-btn" id="memoryClearBtn" style="margin-top:8px;">Forget everything</button>
+                </div>
+                <div class="setting-group">
+                    <label>Mood tracker <span id="moodBadge" class="mood-badge">neutral</span></label>
+                    <div class="hint">A lightweight, disclosed-heuristic sentiment read of your recent messages (keyword-based, not a clinical or diagnostic signal). It only tints the brain visualization — it never changes what the model is told to think about you.</div>
+                </div>
+            </div>
+
+            <!-- TAB: Extras (ported from Xpai: focus mode, council mode, price ticker; + new analytics) -->
+            <div class="settings-tabpanel" data-tabpanel="extras">
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="focusModeCheckbox">
+                    <label for="focusModeCheckbox">Focus Mode available (hides HUD chrome, toggle with the header button or Ctrl+.)</label>
+                </div>
+                <div class="setting-group">
+                    <label>Council Mode — second comparison provider</label>
+                    <select id="councilProviderSelect">
+                        <option value="">Off</option>
+                        <option value="openai">OpenAI-compatible</option>
+                        <option value="gemini">Gemini</option>
+                        <option value="ollama">Ollama (local)</option>
+                    </select>
+                    <div class="hint">When set, the COUNCIL button sends your prompt to both your main provider and this one, and shows both answers side-by-side so you can compare.</div>
+                </div>
+                <div class="setting-group">
+                    <label>Council API key / endpoint (if different from main)</label>
+                    <input type="password" id="councilApiKeyInput" placeholder="Leave blank to reuse main API key">
+                    <input type="text" id="councilBaseUrlInput" placeholder="Leave blank to reuse main base URL" style="margin-top:6px;">
+                </div>
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="tickerEnabledCheckbox">
+                    <label for="tickerEnabledCheckbox">Show live crypto price ticker</label>
+                </div>
+                <div class="hint">Calls a public price API directly from your browser (no key needed). This is a convenience demo, not a production pattern — a real deployment should proxy this through a backend to avoid rate limits. Off by default.</div>
+            </div>
+
+            <!-- TAB: Accessibility (new) -->
+            <div class="settings-tabpanel" data-tabpanel="accessibility">
+                <div class="setting-group">
+                    <label>Text size <span id="fontScaleValue">100%</span></label>
+                    <input type="range" id="fontScaleSlider" min="85" max="140" step="5" value="100">
+                </div>
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="reducedMotionCheckbox">
+                    <label for="reducedMotionCheckbox">Reduce motion (also follows your OS setting automatically)</label>
+                </div>
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="highContrastCheckbox">
+                    <label for="highContrastCheckbox">High-contrast text</label>
+                </div>
+                <div class="setting-group checkbox-row">
+                    <input type="checkbox" id="dyslexiaFontCheckbox">
+                    <label for="dyslexiaFontCheckbox">Use a simpler, more spaced-out font for body text</label>
+                </div>
+            </div>
+
+            <!-- TAB: Security (new — honest local-device lock, NOT server auth) -->
+            <div class="settings-tabpanel" data-tabpanel="security">
+                <div class="hint" style="margin-bottom:8px;">This is a <b>local-device lock</b>, not an account or server login — it only hides sensitive settings from someone glancing at your screen, and the passphrase is checked entirely inside this browser tab. Anyone with access to your browser's dev tools can still bypass it. It is not a real security boundary.</div>
+                <div class="setting-group" id="securitySetupBlock">
+                    <label>Set a local passphrase</label>
+                    <input type="password" id="localLockPassInput" placeholder="Choose a passphrase">
+                    <button class="hud-btn" id="localLockSetBtn" style="margin-top:8px;">Enable local lock</button>
+                </div>
+                <div class="setting-group" id="securityRemoveBlock" style="display:none;">
+                    <div class="hint">Local lock is currently <b>enabled</b> on this device.</div>
+                    <button class="hud-btn danger" id="localLockRemoveBtn">Disable local lock</button>
+                </div>
+            </div>
+
+            </div>
+            </div>
+
+            <div class="settings-actions">
+                <button class="hud-btn active-btn" id="saveSettings">[ SAVE ]</button>
+                <button class="hud-btn" id="cancelSettings">[ CANCEL ]</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/senpai/app.js"></script>
+</body>
+</html>

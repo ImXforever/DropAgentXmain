@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مقایسه DropAgentXmain v3.0.0 با DropAgentXBot v2.0.0-final</title>
+<style>
+  :root{--bg:#0b0e17;--card:rgba(255,255,255,.045);--line:rgba(255,255,255,.09);--txt:#e8ecf4;--dim:#9aa3b5;
+  --cyan:#22d3ee;--green:#34d399;--red:#f87171;--amber:#fbbf24;--violet:#a78bfa;--pink:#f472b6;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.9;padding:24px 16px;max-width:1060px;margin:0 auto}
+  .glow{position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(600px 300px at 85% -5%,rgba(34,211,238,.13),transparent 60%),
+               radial-gradient(500px 260px at 5% 15%,rgba(167,139,250,.10),transparent 60%),
+               radial-gradient(700px 350px at 50% 110%,rgba(244,114,182,.07),transparent 60%)}
+  .wrap{position:relative;z-index:1}
+  header{text-align:center;padding:28px 18px;border:1px solid var(--line);border-radius:22px;
+    background:linear-gradient(160deg,rgba(34,211,238,.08),rgba(167,139,250,.06));backdrop-filter:blur(8px);margin-bottom:26px}
+  h1{font-size:1.55rem;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px}
+  .sub{color:var(--dim);font-size:.95rem}
+  .badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .badge{padding:5px 14px;border-radius:999px;font-size:.82rem;border:1px solid var(--line);background:var(--card)}
+  h2{font-size:1.2rem;margin:34px 0 14px;padding-right:12px;border-right:4px solid var(--cyan)}
+  h2.v{border-color:var(--violet)} h2.p{border-color:var(--pink)} h2.g{border-color:var(--green)} h2.r{border-color:var(--red)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin:10px 0}
+  th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+  th{color:var(--cyan);font-weight:700;background:rgba(34,211,238,.06)}
+  td.ok{color:var(--green);white-space:nowrap} td.no{color:var(--red);white-space:nowrap} td.mid{color:var(--amber);white-space:nowrap}
+  code{background:rgba(34,211,238,.1);color:var(--cyan);padding:1px 7px;border-radius:6px;font-size:.82em;direction:ltr;display:inline-block}
+  .kbox{border-radius:14px;padding:16px 18px;margin:14px 0;border:1px solid var(--line)}
+  .k-red{background:rgba(248,113,113,.07);border-color:rgba(248,113,113,.3)}
+  .k-green{background:rgba(52,211,153,.07);border-color:rgba(52,211,153,.3)}
+  .k-cyan{background:rgba(34,211,238,.06);border-color:rgba(34,211,238,.3)}
+  .k-amber{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.3)}
+  .big{font-size:1.25rem;font-weight:800}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+  .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;margin-left:4px}
+  .p-c{background:rgba(34,211,238,.15);color:var(--cyan)} .p-v{background:rgba(167,139,250,.15);color:var(--violet)}
+  .p-g{background:rgba(52,211,153,.15);color:var(--green)} .p-r{background:rgba(248,113,113,.15);color:var(--red)}
+  .p-a{background:rgba(251,191,36,.15);color:var(--amber)} .p-p{background:rgba(244,114,182,.15);color:var(--pink)}
+  .bar{height:10px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 2px}
+  .bar>i{display:block;height:100%;border-radius:6px}
+  .foot{text-align:center;color:var(--dim);font-size:.8rem;margin-top:30px}
+  ul{padding-right:20px} li{margin:4px 0}
+  .num{font-weight:800;color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="wrap">
+
+<header>
+  <h1>⚖️ مقایسه دو نسخه DropAgentX</h1>
+  <div class="sub">ریپوی جدید تو: <b>DropAgentXmain — v3.0.0 «غول واحد»</b> &nbsp;⟷&nbsp; نسخه ساخت مشترک: <b>DropAgentXBot — v2.0.0-final «نسخه ۸۰۰۰ نفر»</b></div>
+  <div class="badges">
+    <span class="badge">📅 ۲۰۲۶-۰۸-۲۸</span>
+    <span class="badge">🌿 v3: ۲ کامیت، push کامل</span>
+    <span class="badge">📦 v2-final: ۱۱ فایل، +۱۰۷۲/−۲۹۳ خط</span>
+  </div>
+</header>
+
+<div class="kbox k-cyan">
+  <span class="big">🎯 خلاصه یک‌خطی:</span> دو مسیر <b>مکمل</b> رفته‌اید، نه جایگزین هم —
+  <b style="color:var(--violet)">تو معماری و هوش AI را جلو بردی</b> (گیت‌وی، روتر LLM، حافظه ۷فستی، RL، رصدپذیری) و
+  <b style="color:var(--cyan)">نسخه ما پایداری و ظرفیت را</b> (۶ فیکس لاگ، داوری تسک، فایل ابری، نگهداری خودکار).
+  <b>هیچ‌کدام از ۶ فیکس و قابلیت‌های عملیاتی ما هنوز وارد v3 نشده</b> و مهم‌ترین باگ لاگ (کرش دانلود) دقیقاً با همان کد قبلی در v3 زنده است.
+</div>
+
+<h2 class="r">🐛 ماتریس ۱ — سرنوشت ۶ باگ لاگ در v3.0.0</h2>
+<div class="card">
+<table>
+<tr><th>باگ (از لاگ Railway)</th><th>v2.0-final (ما)</th><th>v3.0.0 (ریپوی جدیدت)</th></tr>
+<tr><td><b>۱. کرش دانلود محصول</b> — کپشن بدون سقف ۱۰۲۴</td>
+  <td class="ok">✅ فیکس کامل + فالبک دولایه</td>
+  <td class="no">❌ زنده! <code>products.py:207</code> همان کد قبلی:<br><code>caption=f"📥 **{title}**..."</code> بدون سقف و با Markdown خام</td></tr>
+<tr><td><b>۲. parse_mode Markdown شکستنی</b> (کاراکترهای _ * [ در محتوای کاربر)</td>
+  <td class="ok">✅ HTML + html.escape</td>
+  <td class="mid">⚠️ جزئی — <code>send_safe/edit_safe</code> جدید در utils (خوب!) ولی مسیر دانلود/محصول هنوز Markdown خام</td></tr>
+<tr><td><b>۳. کرش بی‌بازخورد به کاربر</b></td>
+  <td class="ok">✅ callback.answer(show_alert)</td>
+  <td class="mid">⚠️ نیمه‌فیکس — خطا دیگر لاگ می‌شود (پیشرفت واقعی ✅) ولی کاربر هنوز هیچ پیامی نمی‌گیرد و دانلود می‌شکند</td></tr>
+<tr><td><b>۴. پارس callback بدون گارد</b></td>
+  <td class="ok">✅ try/except + پیام</td>
+  <td class="no">❌ بدون تغییر</td></tr>
+<tr><td><b>۵. لاگ خطای سراسری «: None»</b></td>
+  <td class="ok">✅ خواندن event.exception</td>
+  <td class="ok">✅✅ کامل‌تر از ما! middleware ErrorCapture + جدول app_logs + لاگ JSON + excepthook — <b>این را تو بهتر حل کردی</b> 👏</td></tr>
+<tr><td><b>۶. ریفرال همیشه صفر</b> (۲ زیرباگ)</td>
+  <td class="ok">✅ هر دو فیکس</td>
+  <td class="no">❌ زنده! <code>start.py:72</code>:<br><code>is_new = await get_or_create_user(...) is None</code> — همیشه False است چون همان تابع خودش می‌سازد → <code>set_referred_by</code> هرگز اجرا نمی‌شود + referral.py هم دست‌نخورده (فقط completed می‌شمارد، تسک‌ها verified ثبت می‌شوند)</td></tr>
+</table>
+</div>
+
+<h2 class="r">📊 ماتریس ۲ — هدف ۸٬۰۰۰ کاربر / ۵۰۰MB</h2>
+<div class="card">
+<table>
+<tr><th>معیار</th><th>v2.0-final (ما)</th><th>v3.0.0 (ریپوی جدیدت)</th></tr>
+<tr><td>سقف حافظه چت</td><td class="ok">✅ ۲۵ پیام · سقف نقشی ۲۰۰۰/۱۵۰۰</td><td class="no">❌ همان ۶۰ پیام × ۶۰۰۰ کاراکتر (<code>database.py:1368</code> — MEMORY_MAX_ROWS=60)</td></tr>
+<tr><td>FTS جستجو</td><td class="ok">✅ فقط پیام کاربر (≈نصف حجم)</td><td class="no">❌ همه پیام‌ها</td></tr>
+<tr><td>فایل محصولات</td><td class="ok">✅ ابری file_id تلگرام → 0 بایت Volume</td><td class="no">❌ روی دیسک (~۴۲۲KB/کاربر → گلوگاه اصلی)</td></tr>
+<tr><td>نگهداری خودکار</td><td class="ok">✅ هشدار ۴۰۰MB + sweep هفتگی + VACUUM ماهانه + آرشیو</td><td class="no">❌ cron_jobs.py دست‌نخورده</td></tr>
+<tr><td>تسک‌ها</td><td class="ok">✅ صف داوری ادمین (ضد سوءاستفاده)</td><td class="no">❌ پاداش فوری بدون بررسی (tasks.py دست‌نخورده — <code>update_credits</code> در confirm)</td></tr>
+</table>
+<div class="kbox k-red">
+  <b>⚠️ برآورد ظرفیت v3 (با اعداد شبیه‌سازی معتبرِ ما روی همین مسیرهای دست‌نخورده):</b><br>
+  <div style="margin-top:8px">واقع‌بینانه: ۶۲KB/کاربر × ۸٬۰۰۰ = <b>≈۴۹۶MB</b> — دقیقاً روی لبه 🔥 بدون هیچ حاشیه امن
+  <div class="bar"><i style="width:99%;background:linear-gradient(90deg,var(--amber),var(--red))"></i></div></div>
+  <div style="margin-top:8px">AI-سنگین: ۱۷۹KB/کاربر × ۸٬۰۰۰ = <b>≈۱٬۴۳۴MB</b> — منفجر ❌
+  <div class="bar"><i style="width:100%;background:linear-gradient(90deg,var(--red),#ef4444)"></i></div></div>
+  <div style="margin-top:8px">نسخه ما برای مقایسه: ۱۸۲MB (واقع‌بینانه) / ۳۹۴MB (AI-سنگین) ✅
+  <div class="bar"><i style="width:79%;background:linear-gradient(90deg,var(--green),var(--cyan))"></i></div></div>
+  <div style="margin-top:10px;color:var(--amber)">⚡ و بدتر: v3 سه منبع رشد <b>جدید و بدون سیاست پاک‌سازی</b> اضافه کرده:
+  <code>app_logs</code> (هر WARNING/ERROR + audit)، <code>memory_facets</code>، <code>rl_identity</code> → ریسک حجم کمی سنگین‌تر از پایه v1.1.1 هم هست.</div>
+</div>
+</div>
+
+<h2 class="v">🏆 ماتریس ۳ — آنچه v3.0.0 دارد و نسخه ما ندارد (کار واقعاً خوبی بود!)</h2>
+<div class="card">
+<table>
+<tr><th>ماژول</th><th>حجم</th><th>ارزش</th></tr>
+<tr><td><b>memory2.py</b> — حافظه ۷فستی با وزن/زوال/استخراج LLM + جدول memory_facets</td><td>۳۹۴ خط</td><td><span class="pill p-v">هوشمندی</span> جهش کیفی چت هرمس</td></tr>
+<tr><td><b>observability.py</b> — لاگ JSON، app_logs، audit، decorator @logged، ErrorCapture</td><td>۳۳۴ خط</td><td><span class="pill p-g">عملیات</span> دیباگ‌پذیری حرفه‌ای روی Railway</td></tr>
+<tr><td><b>identity_rl.py</b> — Q-learning با ۷ برچسب هویتی (churn_risk، high_value و...)</td><td>۲۶۱ خط</td><td><span class="pill p-p">رهگیری</span> سگمنت‌سازی کاربر بدون ML-lib</td></tr>
+<tr><td><b>media_v2.py</b> — تولید تصویر Gemini رایگان + فالبک OpenAI-compatible + vision</td><td>۱۹۳ خط</td><td><span class="pill p-c">AI</span> کاور رایگان محصولات</td></tr>
+<tr><td><b>gateway/</b> — ورود واحد Starlette: /v1→روتر، /dashboard، /panel، agent.json</td><td>۱۴۷ خط</td><td><span class="pill p-v">معماری</span> یک مرز auth برای همه سرویس‌ها</td></tr>
+<tr><td><b>shared/llm/router_client</b> — فالبک ۳سطحی + چندکلیدی/کیوتا از 9router (fail-safe به hermes)</td><td>—</td><td><span class="pill p-c">AI</span> پایداری LLM + صرفهجویی توکن</td></tr>
+<tr><td><b>shared/context/compressor + shared/security/skills_guard</b> — فشردهسازی کانتکست + اسکن مهارت‌های خطرناک</td><td>—</td><td><span class="pill p-a">امنیت/هزینه</span></td></tr>
+<tr><td><b>a2a_v2.py + mcp_bridge.py</b> — A2A با توکن + expose ابزارهای بات به MCP</td><td>۲۲۵ خط</td><td><span class="pill p-v">اکوسیستم</span></td></tr>
+<tr><td><b>admin_v2.py</b> — /id /mem2 /logs /errmap /rlset /system + endpointهای وب جدید</td><td>—</td><td><span class="pill p-g">ادمین</span> مکمل پنل ما</td></tr>
+<tr><td><b>استقرار</b> — railway.json، Procfile، HEALTHCHECK، deploy سه‌سرویسی، CONTRIBUTING</td><td>—</td><td><span class="pill p-g">DevOps</span></td></tr>
+<tr><td><b>تست‌ها</b> — test_core + v3_glue + v3_infra + v3_tools</td><td class="num">۵۷ تست</td><td><span class="pill p-g">کیفیت</span> (چنج‌لاگ می‌گوید ۴۳ — الان ۵۷ تا پیدا کردم!)</td></tr>
+</table>
+</div>
+
+<h2 class="g">💎 ماتریس ۴ — آنچه نسخه ما دارد و v3.0.0 ندارد</h2>
+<div class="card">
+<table>
+<tr><th>قابلیت</th><th>جزئیات</th></tr>
+<tr><td><span class="pill p-c">فیکس</span> ۶ باگ لاگ</td><td>کپشن/Markdown/بازخورد/پارس/event.exception/ریفرال — بالاتر</td></tr>
+<tr><td><span class="pill p-c">ظرفیت</span> فایل ابری file_id</td><td>کانال ذخیره + ستون file_fileid + مایگریشن خودکار + دانلود با فالبک دیسک</td></tr>
+<tr><td><span class="pill p-c">ظرفیت</span> سقف‌های چت v2</td><td>۲۵ پیام · ۲۰۰۰/۱۵۰۰ کاراکتر · FTS فقط کاربر (config-driven)</td></tr>
+<tr><td><span class="pill p-c">ظرفیت</span> نگهداری خودکار cron</td><td>هشدار حجم روزانه · sweep هفتگی دوشنبه ۴صبح · VACUUM ماهانه · آرشیو JSON تراکنش</td></tr>
+<tr><td><span class="pill p-g">ادمین</span> ۱۰ ابزار جدید</td><td>⚖️ داوری گزینه‌به‌گزینه تسک‌ها · 🗄️ مانیتور DB با تخمین ظرفیت · 🧹 sweep · 🗜️ VACUUM · 📈 رشد · 🏆 فروشندگان · 📦 سلامت محصولات · 💸 درآمد ۳۰ر · 🗄️ آرشیو · 🩺 سلامت سیستم</td></tr>
+<tr><td><span class="pill p-g">ضد سوءاستفاده</span> تسک‌ها</td><td>pending → داوری ادمین → پرداخت/رد + آزادسازی ظرفیت + اطلاع به کاربر</td></tr>
+<tr><td><span class="pill p-a">مستندات</span></td><td>README کامل گیت‌هاب + CHANGELOG-v2.0.0 + شبیه‌ساز ظرفیت داخل ریپو (tools_capacity_sim.py)</td></tr>
+<tr><td><span class="pill p-a">اعتبارسنجی</span></td><td>۱۵/۱۵ تست منطقی روی SQLite واقعی + شبیه‌سازی ۴k/۸k دو سناریو</td></tr>
+</table>
+</div>
+
+<h2 class="p">🔀 نقشه ادغام — اگر بخواهی این دو را یکی کنی</h2>
+<div class="card">
+<p><b>پیشنهاد من: پایه = v3.0.0</b> (معماری آینده آنجاست)، و پورتِ «لایه عملیاتی» نسخه ما روش — حدود ۷۰۰ خط در ۹ فایل. تداخل‌ها:</p>
+<table>
+<tr><th>فایل مشترک</th><th>تغییر سمت تو</th><th>تغییر سمت ما</th><th>سختی ادغام</th></tr>
+<tr><td>handlers/start.py</td><td>+۱/−۱ (welcome → Markdown خام)</td><td>فیکس is_new (خط ۷۲)</td><td class="mid">⚠️ تداخل مستقیم روی همان ناحیه — نسخه ما باید برنده شود + برگرداندن send_safe</td></tr>
+<tr><td>bot.py</td><td>+۴۶/−۱۳ (observability hook ها)</td><td>+۲/−۲ (exc resolution)</td><td class="ok">✅ ساده — ترکیب هر دو (middleware تو + فالبک event.exception ما)</td></tr>
+<tr><td>config.py</td><td>+۷۰ (فست/مدیا/روتر/A2A)</td><td>+۱۳ (ظرفیت)</td><td class="ok">✅ هر دو append — بدون تعارض</td></tr>
+<tr><td>database.py</td><td>+۱/−۱</td><td>+۲۷۹ (بخش ظرفیت)</td><td class="ok">✅ تقریباً بدون تعارض</td></tr>
+<tr><td>handlers/admin.py</td><td>+۸/−۸</td><td>+۴۵۰ (۱۰ ابزار)</td><td class="ok">✅ نقاط مختلف فایل</td></tr>
+<tr><td>handlers/products.py</td><td>+۲/−۲</td><td>+۱۱۲ (دانلود + آپلود ابری)</td><td class="ok">✅ توابع دانلود/آپلود ما جایگزین</td></tr>
+<tr><td>.env.example / README</td><td>به‌روز</td><td>به‌روز</td><td class="mid">⚠️ ادغام دستی محتوا</td></tr>
+<tr><td>tasks.py / referral.py / cron_jobs.py</td><td class="ok">دست‌نخورده</td><td>فیکس‌ها</td><td class="ok">✅ کپی مستقیم — صفر تعارض</td></tr>
+<tr><td>utils.py</td><td>+۲۵/−۸۹ (send_safe refactor)</td><td class="ok">دست‌نخورده</td><td class="ok">✅ صفر تعارض</td></tr>
+</table>
+<p style="margin-top:10px;color:var(--dim)">💡 ضمن ادغام، ۳ چیز را هم باید به v3 اضافه کرد که الان بی‌سرپوست: سیاست پاک‌سازی برای app_logs/rl_identity (رشد بی‌سقف!)، سقف حافظه برای memory_facets، و FILE_STORAGE_CHANNEL_ID در مسیر آپلود products.</p>
+</div>
+
+<div class="kbox k-green">
+  <span class="big">🏆 جمع‌بندی</span><br>
+  • <b>v3.0.0 تو</b>: معماری و هوش عالی، ۵۷ تست، رصدپذیری حرفه‌ای — ولی <b>۶ باگ لاگ هنوز زنده</b> (مهم‌ترین: کرش دانلود <code>products.py:207</code> و ریفرال <code>start.py:72</code>) و <b>هدف ۸۰۰۰ کاربر/۵۰۰MB را رد می‌کند</b> (AI-سنگین ≈۱.۴GB).<br>
+  • <b>v2.0-final ما</b>: پایدار و اثبات‌شده برای ۸۰۰۰ کاربر — ولی بدون ماژول‌های جدید تو.<br>
+  • <b>راه درست</b>: ادغام — لایه عملیاتی ما روی معماری تو. تداخل واقعی فقط ۱ نقطه است؛ بقیه تمیز می‌چسبد.
+</div>
+
+<div class="foot">DropAgentX — گزارش مقایسه v3.0.0 (DropAgentXmain) × v2.0.0-final · تولیدشده در Arena Agent Mode · ۲۰۲۶-۰۸-۲۸</div>
+</div>
+</body>
+</html>
