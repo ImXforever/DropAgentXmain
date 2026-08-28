@@ -4,8 +4,6 @@
 #   router   : 9router (published docker image) — LLM routing / dashboard
 #
 # The gateway is the single entry; it proxies /v1 -> router and /dashboard -> router.
-version: "3.8"
-
 services:
   gateway:
     build:
