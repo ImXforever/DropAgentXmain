@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ورود به پنل ادمین DropAgentX">
+<meta name="theme-color" content="#0b0e14">
+<title>ورود ادمین — DropAgentX</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b0e14;--panel:#131824;--line:#232b3d;--txt:#e8ecf4;--dim:#8b94a8;--gold:#f5c451}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(800px 400px at 50% -10%,#17203a55,transparent),var(--bg);
+       color:var(--txt);font-family:Vazirmatn,Tahoma,sans-serif;
+       display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  ::selection{background:#f5c45140}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#232b3d;border-radius:8px}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:38px 34px;width:100%;max-width:380px;text-align:center}
+  h1{font-size:20px;margin-bottom:6px}
+  p{color:var(--dim);font-size:12.5px;margin-bottom:24px;line-height:1.9}
+  .pw{position:relative}
+  input{width:100%;background:#0f1420;border:1px solid var(--line);border-radius:12px;padding:13px 44px;
+        color:var(--txt);font-family:inherit;font-size:14px;outline:none;margin-bottom:14px;text-align:center}
+  input:focus{border-color:var(--gold)}
+  .eye{position:absolute;inset-inline-end:10px;top:13px;background:none;border:0;cursor:pointer;
+       font-size:16px;opacity:.7;line-height:1;padding:4px}
+  .eye:hover{opacity:1}
+  button[type=submit]{width:100%;background:linear-gradient(135deg,#f5c451,#e0a32e);color:#201602;border:0;border-radius:12px;
+          padding:13px;font-family:inherit;font-size:14.5px;font-weight:800;cursor:pointer;transition:.15s}
+  button[type=submit]:hover:not(:disabled){filter:brightness(1.07)}
+  button[type=submit]:disabled{opacity:.65;cursor:not-allowed}
+  .hint{color:var(--gold);font-size:11.5px;min-height:17px;margin-top:6px}
+  #err{color:#f87171;font-size:12.5px;min-height:18px;margin-top:8px;line-height:1.8}
+  .back{display:inline-block;margin-top:16px;color:var(--dim);font-size:12px;text-decoration:none}
+  .back:hover{color:var(--gold)}
+  .shake{animation:shake .4s}
+  @keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<form class="box" id="f" autocomplete="on" novalidate>
+  <h1>🛍️ پنل ادمین DropAgentX</h1>
+  <p>برای ورود، رمز WEB_PASSWORD را وارد کن</p>
+  <div class="pw">
+    <input type="password" id="pw" placeholder="رمز عبور" autocomplete="current-password"
+           autofocus maxlength="128" aria-label="رمز عبور">
+    <button type="button" class="eye" id="eye" aria-label="نمایش / مخفی کردن رمز">👁</button>
+  </div>
+  <button type="submit" id="go">ورود به پنل</button>
+  <div id="caps" class="hint" hidden>⚠️ Caps Lock روشن است</div>
+  <div id="err" role="alert" aria-live="assertive"></div>
+  <a class="back" href="/">🏪 بازگشت به فروشگاه</a>
+</form>
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const f=$('#f'),pw=$('#pw'),btn=$('#go'),err=$('#err'),caps=$('#caps');
+let busy=false,done=false;
+
+function setBusy(b){
+  busy=b;btn.disabled=b;
+  if(!done)btn.textContent=b?'…در حال ورود':'ورود به پنل';
+}
+function showErr(m){
+  err.textContent=m;
+  const box=$('.box');
+  box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake');
+  pw.focus();pw.select();
+}
+function msgFor(r,d){
+  if(r.status===401)return 'رمز اشتباه است';
+  if(r.status===429)return 'تلاش‌های زیاد — حدود یک دقیقه دیگر امتحان کن';
+  if(r.status===503)return 'WEB_PASSWORD روی سرور تنظیم نشده است';
+  const det=d&&d.detail;
+  if(typeof det==='string'&&det)return det;
+  if(Array.isArray(det))return det.map(x=>x.msg||'').filter(Boolean).join(' · ')||'ورود ناموفق';
+  return 'ورود ناموفق (HTTP '+r.status+')';
+}
+
+f.addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  if(busy||done)return;
+  err.textContent='';
+  if(!pw.value){showErr('رمز را وارد کن');return}
+  setBusy(true);
+  try{
+    const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:pw.value})});
+    if(r.ok){
+      done=true;
+      btn.textContent='✅ موفق — در حال انتقال';
+      setTimeout(()=>location.replace('/admin'),400);
+      return;
+    }
+    let d={};try{d=await r.json()}catch(_){}
+    showErr(msgFor(r,d));
+  }catch(_){
+    showErr('ارتباط با سرور برقرار نشد');
+  }finally{
+    if(!done)setBusy(false);
+  }
+});
+
+/* eye toggle */
+$('#eye').addEventListener('click',()=>{
+  const show=pw.type==='password';
+  pw.type=show?'text':'password';
+  $('#eye').textContent=show?'🙈':'👁';
+  pw.focus();
+});
+
+/* caps-lock hint */
+function capState(e){try{return !!(e.getModifierState&&e.getModifierState('CapsLock'))}catch(_){return false}}
+pw.addEventListener('keydown',e=>{caps.hidden=!capState(e)});
+pw.addEventListener('keyup',e=>{caps.hidden=!capState(e)});
+pw.addEventListener('blur',()=>{caps.hidden=true});
+pw.addEventListener('input',()=>{err.textContent=''});
+
+/* preflight: already logged in? password set? */
+(async()=>{
+  try{
+    const r=await fetch('/api/me',{cache:'no-store'});
+    if(!r.ok)return;
+    const d=await r.json();
+    if(d.admin)location.replace('/admin');
+    else if(d.password_set===false)err.textContent='⚠️ WEB_PASSWORD روی سرور تنظیم نشده است';
+  }catch(_){}
+})();
+</script>
+</body>
+</html>

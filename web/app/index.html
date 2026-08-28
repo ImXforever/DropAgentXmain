@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no,
+      viewport-fit=cover">
+<title>DropAgentX</title>
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/app/assets/logo.jpg">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app/css/design-system.css">
+<link rel="stylesheet" href="/app/css/pages.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar" id="topbar"></header>
+  <main id="view" class="page"></main>
+  <nav class="bottomnav" id="nav"></nav>
+  <div id="toast"></div>
+</div>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/><circle cx="12" cy="12" r="3.2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5 8-5s6.5 1.4 8 5"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.3S3.5 15.4 3.5 9.6C3.5 6.9 5.6 5 8 5c1.6 0 3 .8 4 2.2C13 5.8 14.4 5 16 5c2.4 0 4.5 1.9 4.5 4.6 0 5.8-8.5 10.7-8.5 10.7z"/></symbol>
+  <symbol id="i-heart-f" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.3S3.5 15.4 3.5 9.6C3.5 6.9 5.6 5 8 5c1.6 0 3 .8 4 2.2C13 5.8 14.4 5 16 5c2.4 0 4.5 1.9 4.5 4.6 0 5.8-8.5 10.7-8.5 10.7z"/></symbol>
+  <symbol id="i-dislike" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M17 3H7v11l4 7c1.5 0 2.5-1 2.5-2.5L13 15h5a2 2 0 0 0 2-2.4L18.6 4.6A2 2 0 0 0 16.6 3H17z"/><path d="M7 3v11"/></symbol>
+  <symbol id="i-comment" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4l2.2-3A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></symbol>
+  <symbol id="i-repost" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
+  <symbol id="i-quote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5" stroke-linecap="round"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 21l1.9-5.6A8.5 8.5 0 1 1 21 11.5z"/></symbol>
+</defs></svg>
+
+<script src="/app/js/core/tg.js"></script>
+<script src="/app/js/core/api.js"></script>
+<script src="/app/js/core/ui.js"></script>
+<script src="/app/js/core/router.js"></script>
+<script src="/app/js/pages/home.js"></script>
+<script src="/app/js/pages/explore.js"></script>
+<script src="/app/js/pages/search.js"></script>
+<script src="/app/js/pages/product.js"></script>
+<script src="/app/js/pages/create.js"></script>
+<script src="/app/js/pages/profile.js"></script>
+<script src="/app/js/pages/wallet.js"></script>
+<script src="/app/js/pages/activity.js"></script>
+<script src="/app/js/pages/agent.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>DGX.boot())</script>
+</body>
+</html>

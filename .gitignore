@@ -1,0 +1,30 @@
+# secrets — NEVER commit
+.env
+
+# runtime data
+data/
+uploads/
+
+# python
+__pycache__/
+*.pyc
+venv/
+
+# local test scripts (optional keep)
+*_test.py
+smoke_test.py
+seed_live.py
+_fix_guards.py
+ai_probe.py
+
+# test artifacts (from file_tools tests)
+a.py
+b.py
+c.txt
+cfg.py
+src/
+old backups
+
+# local AI diagnostics scratch
+probe_*.txt
+smoke_*.txt
